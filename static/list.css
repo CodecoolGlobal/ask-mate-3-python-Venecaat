@@ -1,0 +1,291 @@
+.page-body{
+    padding-top: 60px;
+}
+
+.list-main-div{
+    display: flex;
+    flex-direction: column;
+}
+.search-bar-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.search-bar-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.search-input{
+    max-width: 8em;
+    max-height: 2em;
+}
+.search-button{
+    background-color: #262626;
+}
+.sort-by-label {
+    font-weight: bolder;
+    font-size: 20px;
+}
+.sort-dropdown-selector {
+    height: 2em;
+    background-color: #262626;
+    border-radius: 4px;
+    border: solid;
+    border-width: 1px !important;
+    border-color: #1f1f1f;
+    color: #c5c5c5;
+    padding: 5px 15px;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+    transition-duration: 0.4s;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+.sort-dropdown-selector:hover {
+    border-radius: 4px;
+    border-width: 1px !important;
+    border: solid;
+    border-color: #c5c5c5;
+    background-color: #383838;
+}
+.sort-button{
+    max-width: 4em;
+    background-color: #262626;
+}
+
+
+/*-------------------------------------QUESTION BODY-------------------------------------*/
+.question-container{
+    border-radius: 0px 0px 15px 0px;
+    width: 70%;
+    margin: auto;
+    background-color: #1c1c1c;
+    color: #c5c5c5;
+    font-size: 17px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+
+/*-------------------------------------HEADER SECTION-------------------------------------*/
+.header{
+    display: flex;
+
+    flex-direction: row;
+    width: 100%;
+    background-color: #262626;
+}
+.header>.title-box>h1{
+    font-size: 1.5em;
+    margin-top: 0.5%;
+    margin-bottom: 0.5%;
+}
+.date-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    min-width: 120px;
+    max-width: 120px;
+    text-align: left;
+}
+.date{
+    margin-top: 6px;
+    margin-left: 6px;
+}
+.separator-line{
+    fill: #545454;
+    align-self: center;
+    min-width: 25.5px;
+    max-width: 1.5em;
+}
+.title-box{
+    flex-grow: 12;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 80%;
+}
+.right-side{
+    min-width: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.vote-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding-left: 5px;
+    height: 100%;
+}
+.question-vote-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.vote-count{
+    padding-top: 3px;
+    line-height: 1;
+    margin-right: 2px;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    font-size: 1em;
+}
+.vote-button-container{
+    flex-direction: column;
+}
+#vote-button{
+    margin: 0;
+    border-color: #262626;
+    background-color: #262626;
+    font-size: 14px;
+    width: 1.7em;
+    height: 1.7em;
+    padding: 0;
+}
+#vote-button:hover{
+    border-color: #c5c5c5;
+}
+.views{
+    min-width: 62px;
+    margin-right: 10px;
+    display: flex;
+    align-self: center;
+    justify-content: flex-end;
+}
+
+
+
+/*-------------------------------------BODY SECTION-------------------------------------*/
+.description-box{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    text-align: left;
+    width: 100%;
+    padding-top: 10px;
+     /*padding-left: 120px;*/
+    font-size: 1.2em;
+}
+.post-image{
+    min-width: 120px;
+    width: 120px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.question-image{
+    margin-left: 10px;
+    object-fit: cover;
+    filter: blur(0.5px);
+    box-sizing: border-box;
+    border-style: solid;
+    border-width: 5px;
+    border-color: #262626;
+    border-radius: 5px;
+    width: 80px;
+    height: 80px;
+}
+.answer-post-image{
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+.answer-image{
+    object-fit: cover;
+    filter: blur(0.5px);
+    box-sizing: border-box;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #545454;
+    border-radius: 3px;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+/*-------------------------------------FOOTER SECTION-------------------------------------*/
+.footer-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    max-height: 120px;
+}
+.tags-container{
+    max-width: 300px;
+    overflow: hidden;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+}
+.tag{
+    margin-right: 2px;
+    margin-left: 2px;
+    padding-left: 5px;
+    border-width: 2px;
+    border-style: solid;
+    color: #757575;
+    border-color: #545454;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.tag-list{
+    margin-right: 2px;
+    margin-left: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-width: 2px;
+    border-style: solid;
+    color: #757575;
+    border-color: #545454;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#x-button{
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+}
+#x-button:hover{
+    border-color: transparent;
+    background-color: transparent;
+}
+.x-button-svg{
+    width: 1.7vw;
+    height: auto;
+}
+.question-button-container{
+    display: flex;
+    justify-content: flex-end;
+    align-self: flex-end;
+    width: 10%;
+    align-items: flex-end;
+}
+
+
+/*-------------------------------------ALWAYS ON TOP BUTTON-------------------------------------*/
+.new-question-button-container{
+    background-color: inherit;
+    position: fixed; /* Fixed/sticky position */
+    bottom: 30px; /* Place the button at the bottom of the page */
+    right: 30px; /* Place the button 30px from the right */
+    z-index: 99; /* Make sure it does not overlap */
+}

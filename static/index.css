@@ -1,0 +1,9 @@
+.menu{
+    margin-bottom: 20px;
+}
+.latest-questions-title{
+    width: 70%;
+    margin: auto;
+    display: flex;
+    justify-content: flex-start;
+}

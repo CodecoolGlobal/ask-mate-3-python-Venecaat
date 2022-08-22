@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Jamaican Q&A</title>
+        <link rel="stylesheet" type="text/css" href="/static/main.css">
+        <link rel="stylesheet" type="text/css" href="/static/list.css">
+    </head>
+    <body class="html-body">
+        <main class="list-main-div">
+            <nav class="navbar">
+                <div class="home-button-container">
+                    <a href="/">
+                    <button button name="home-button" id="home-button"><img src="/static/resources/images/logo.png" alt="home-icon"></button>
+                    </a>
+                </div>
+                <h1 class="main-title">Jamaican <span style="color: seagreen">Q</span>&<span style="color: goldenrod">A</span></h1>
+            </nav>
+            <section class="page-body">
+            <div class="search-bar-container">
+                <form class="search-bar-form" action="/search", method="post">
+                    <input placeholder="Search for a question", name="search_phrase" class="search-input"></input>
+                    <button type="submit" class="search-button">Search</button>
+                </form>
+            </div>
+            <form action="/list" method="get">
+                <label class="sort-by-label">Sort by:</label>
+                <select name="sort_by" class="sort-dropdown-selector">
+                    <option value="submission-desc">Most Recent</option>
+                    <option value="submission-asc">Least Recent</option>
+                    <option value="views-desc">Most Views</option>
+                    <option value="views-asc">Least Views</option>
+                    <option value="votes-desc">Most Votes</option>
+                    <option value="votes-asc">Least Votes</option>
+                </select>
+                <button type="submit" class="sort-button">Sort</button>
+            </form>
+            <br>
+            {% for que in questions %}
+            <article class="question-container">
+                <header class="header">
+                    {% for k,v in que.items() %}
+                        {% if k == "submission_time" %}
+                        <div class="date-container">
+                            <div class="date">
+                            {{ v }}
+                            </div>
+                            <svg class="separator-line" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8.5 15.5h-1V.5h1z" style="fill-rule:evenodd"/></svg>
+                        </div>
+                        {% endif %}
+
+                        {% if k == "title" %}
+                        <div class="title-box"><h1>
+                            {{ v }}
+                        </h1></div>
+                        {% endif %}
+                    {% endfor %}
+                    <section class="right-side">
+                        <div class="vote-container">
+                            <div class="vote-count">
+                            {% for k,v in que.items() %}
+                                {% if k == "vote_number" %}
+                                    {{ v }}
+                                {% endif %}
+                            {% endfor %}
+                            </div>
+                            <form class="question-vote-form" action="/question_voting/{{ que['id'] }}" method="post">
+                                <div class = "vote-button-container">
+                                    <button name="vote" type="submit" value="vote-up" class="circle-button" id="vote-button">⇧</button>
+                                </div>
+                                <div class = "vote-button-container">
+                                    <button name="vote" type="submit" value="vote-down" class="circle-button" id="vote-button">⇩</button>
+                                </div>
+                                <input type="hidden" name="page" value="list">
+                            </form>
+                        </div>
+                        <svg class="separator-line" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8.5 15.5h-1V.5h1z" style="fill-rule:evenodd"/></svg>
+                            {% for k,v in que.items() %}
+                            {% if k == "view_number" %}
+                            <div class="views">
+                                <p>{{ v }}</p>
+                                <svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 5c-4.027 0-7.484 2.881-9 7 1.516 4.119 4.973 7 9 7s7.484-2.881 9-7c-1.516-4.119-4.973-7-9-7zm0 10a3 3 0 1 1 3-3 3 3 0 0 1-3 3z"/></svg>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                    </section>
+                    </header>
+                {% for k,v in que.items() %}
+                    {% if k == "message" %}
+                    <div class="description-box">
+                        
+                        <div class="post-image">
+                                <a href="{{ que['image'] if que['image'] else 'static/resources/images/no-image.png'}}" target="_blank">
+                                    <img class="question-image" src="{{ que['image'] if que['image'] else 'static/resources/images/no-image.png'}}">
+                                </a>
+                        </div>
+                        <div>
+                        {{ v }}
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                <footer class="footer-container">
+{#                    <section class="tags-container">#}
+{#                        {% for tag in tags_to_questions %}#}
+{#                            {% for tg in tag %}#}
+{#                                <div class="tag-list">#}
+{#                                {{ tg['name'] }}#}
+{#                                </div>#}
+{#                            {% endfor %}#}
+{#                        {% endfor %}#}
+{#                    </section>#}
+                    <div class="ezt innen ne vegyetek ki, emiatt megy a to question jobbra"></div>
+                    <div class="question-button-container">
+                        <form action="/question/{{que['id']}}" method="post">
+                            <button type="submit" name="to_question" value="to-question" class="button">▶ To question</button>
+                        </form>
+                    </div>
+                </footer>
+            </article><br>
+            {% endfor %}
+            </section>
+            <mark class="new-question-button-container">
+                <a href="/add-question">
+                    <button name="new-question" type="submit" class="circle-button"><svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" style="enable-background:new 0 0 128 128" xml:space="preserve"><path style="fill:#303030" d="M128 63.954c0 2.006-.797 3.821-2.136 5.127-1.308 1.337-3.125 2.133-5.166 2.133H71.302v49.356c0 4.012-3.284 7.292-7.302 7.292-2.009 0-3.827-.828-5.166-2.134-1.308-1.337-2.136-3.152-2.136-5.159V71.214H7.302c-4.05 0-7.302-3.248-7.302-7.26 0-2.006.797-3.853 2.136-5.159a7.279 7.279 0 0 1 5.166-2.134h49.395V7.306c0-4.012 3.284-7.26 7.302-7.26 2.009 0 3.827.828 5.166 2.133a7.238 7.238 0 0 1 2.136 5.127v49.356h49.395A7.276 7.276 0 0 1 128 63.954z"/></svg></svg></button>
+                </a>
+            </mark>
+        </main>
+    </body>
+</html>

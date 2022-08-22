@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Jamaican Q&A</title>
+        <link rel="stylesheet" type="text/css" href="/static/main.css">
+    </head>
+    <body>
+        <main class="list-main-div">
+            <nav class="navbar">
+                <div class="home-button-container">
+                    <a href="/">
+                    <button button name="home-button" id="home-button"><img src="/static/resources/images/logo.png" alt="home-icon"></button>
+                    </a>
+                </div>
+                <h1 class="main-title">Jamaican <span style="color: seagreen">Q</span>&<span style="color: goldenrod">A</span></h1>
+            </nav>
+            <section class="page-body">
+                <h1>Submit your Question here</h1>
+                <form action="/question/{{ question_for_edit['id'] }}/edit" method="post">
+
+                    <input type="text" class="question-input" value="{{ question_for_edit['title'] }}" name="question" placeholder="Title:" autocomplete="off">
+                    <br><br>
+
+                    <textarea type="text" class="description-input" name="description" rows="4" cols="60" placeholder="Description:">{{ question_for_edit["message"] }}</textarea>
+
+                    <!-- Let's allow the user to submit the form. -->
+                    <br><button type="submit" class="button" id="sort_button">Edit Question!</button>
+                </form>
+            </section>
+        </main>
+    </body>
+</html>

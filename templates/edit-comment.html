@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Jamaican Q&A</title>
+        <link rel="stylesheet" type="text/css" href="/static/main.css">
+    </head>
+    <body>
+        <main class="list-main-div">
+            <nav class="navbar">
+                <div class="home-button-container">
+                    <a href="/">
+                    <button button name="home-button" id="home-button"><img src="/static/resources/images/logo.png" alt="home-icon"></button>
+                    </a>
+                </div>
+                <h1 class="main-title">Jamaican <span style="color: seagreen">Q</span>&<span style="color: goldenrod">A</span></h1>
+            </nav>
+            <section class="page-body">
+                <h1>Submit your Comment here</h1>
+                <form action="/comment/{{ comment_for_edit['id'] }}/edit" method="POST">
+                    <textarea id="description-input" name="description" rows="6" cols="80" class="description-input" placeholder="Comment:">{{ comment_for_edit["message"] }}</textarea>
+
+                    <!-- Let's allow the user to submit the form. -->
+                    <br><button type="submit" class="button" id="sort_button">Submit Comment!</button>
+                </form>
+            </section>
+        </main>
+    </body>
+</html>
