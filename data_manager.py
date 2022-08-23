@@ -1,5 +1,5 @@
 import os
-
+import bcrypt
 import connection
 from datetime import datetime
 
@@ -341,3 +341,60 @@ def get_tags_for_question(cursor, question_id):
         WHERE question_tag.question_id = {question_id};
         """)
     return cursor.fetchall()
+
+
+# --------------------------------------------------------------------------------------
+# Registration and login
+def hash_password(plain_text_password):
+    hashed_bytes = bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt())
+    return hashed_bytes.decode('utf-8')
+
+
+def verify_password(plain_text_password, hashed_password):
+    hashed_bytes_password = hashed_password.encode('utf-8')
+    return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_bytes_password)
+
+
+@connection.connection_handler
+def get_all_user_data(cursor):
+    cursor.execute(
+        """
+        SELECT username, password FROM users
+        """
+    )
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def check_if_user_exists(self, username):
+    exists = False
+    all_user_data = get_all_user_data()
+    for user_data in all_user_data:
+        if username in user_data['username']:
+            exists = True
+
+    return exists
+
+
+@connection.connection_handler
+def get_hashed_password_by_username(self, username):
+    all_user_data = get_all_user_data()
+    for users_data in all_user_data:
+        if username in users_data['username']:
+            hashed_password = users_data['password']
+            return hashed_password
+        else:
+            hashed_password = '$2y$10$QgwruVxXwgw5SAQSVQuAkeRksgXPcIb7aCoiywgxYPL0eAdYRpbJG'
+
+    return hashed_password
+
+
+@connection.connection_handler
+def add_user(cursor, username, hashed_password, reg_date):
+    cursor.execute(
+        """
+        INSERT INTO users (username, password, registration_date)
+        VALUES (%s, %s, %s)
+        """,
+        (username, hashed_password, reg_date)
+    )

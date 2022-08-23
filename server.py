@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, session, escape, flash
 import data_manager, os
 from werkzeug.utils import secure_filename
 
@@ -16,7 +16,9 @@ def allowed_file(filename):
 @app.route("/", methods=['GET', 'POST'])
 def main_page():
     latest_qs = data_manager.get_latest_questions()
-
+    if 'username' in session:
+        username = escape(session['username'])
+        return render_template("index.html", questions=latest_qs, username=username)
     return render_template("index.html", questions=latest_qs)
 
 
@@ -306,6 +308,17 @@ def delete_tag(question_id, tag_id):
 
     return redirect(f'/question/{question_id}')
 
+
+@app.route('/registration', methods=['POST', 'GET'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        text_password = request.form['password']
+        reg_date = data_manager.get_time()
+        hashed_password = data_manager.hash_password(text_password)
+        data_manager.add_user(username, hashed_password, reg_date)
+        return redirect('/')
+    return render_template('registration.html')
 
 if __name__ == "__main__":
     app.run(
