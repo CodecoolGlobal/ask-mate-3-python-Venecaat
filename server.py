@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, session, escape, flash
+from flask import Flask, render_template, redirect, request, session, escape, flash, url_for
 import data_manager, os
 from werkzeug.utils import secure_filename
 
@@ -7,6 +7,7 @@ ALLOWED_EXT = {'png', 'jpg', 'jpeg'}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.secret_key = b'_5#y2L"F4Q8z\xec]/'
 
 
 def allowed_file(filename):
@@ -313,12 +314,45 @@ def delete_tag(question_id, tag_id):
 def register():
     if request.method == 'POST':
         username = request.form['username']
-        text_password = request.form['password']
-        reg_date = data_manager.get_time()
-        hashed_password = data_manager.hash_password(text_password)
-        data_manager.add_user(username, hashed_password, reg_date)
-        return redirect('/')
+        exists = data_manager.check_if_user_exists(username)
+        if exists:
+            flash("A user with this username already exists!", category="error")
+        else:
+            text_password = request.form['password']
+            reg_date = data_manager.get_time()
+            hashed_password = data_manager.hash_password(text_password)
+            data_manager.add_user(username, hashed_password, reg_date)
+            return redirect('/')
     return render_template('registration.html')
+
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method == "POST":
+        username = request.form['username']
+        exists = data_manager.check_if_user_exists(username)
+        if not exists:
+            flash('No user was registered under this username', category='error')
+        else:
+            text_password = request.form['password']
+            hashed_password = data_manager.get_hashed_password_by_username(username)
+            is_matching = data_manager.verify_password(text_password, hashed_password)
+            if not is_matching:
+                flash('Wrong password!', category='error')
+                return redirect('/login')
+            else:
+                session['username'] = username
+                return redirect('/')
+
+    return render_template('login.html')
+
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect('/')
+
+
 
 if __name__ == "__main__":
     app.run(
