@@ -124,9 +124,13 @@ def question_voting(question_id):
     if request.method == "POST":
         if request.form["vote"] == "vote-up" and 'username' in session:
             data_manager.modify_value_in_question(question_id=question_id, voting="vote-up")
+            user_id = data_manager.validate_question_owner(question_id)
+            data_manager.question_vote_up_rep(user_id)
 
         elif request.form['vote'] == "vote-down" and 'username' in session:
             data_manager.modify_value_in_question(question_id=question_id, voting="vote-down")
+            user_id = data_manager.validate_question_owner(question_id)
+            data_manager.question_vote_down_rep(user_id)
         else:
             flash("You have to log in to vote up/vote down")
             return redirect(f'/question/{question_id}')
@@ -286,9 +290,13 @@ def answer_voting(answer_id):
     ans_question_id = data_manager.get_answer_question_id(answer_id)
     if request.form["vote"] == "vote-up" and 'username' in session:
         data_manager.modify_value_in_answer(answer_id=answer_id, voting="vote-up")
+        user_id = data_manager.validate_answer_owner(answer_id)
+        data_manager.answer_vote_up_rep(user_id)
 
     elif request.form['vote'] == "vote-down" and 'username' in session:
         data_manager.modify_value_in_answer(answer_id=answer_id, voting="vote-down")
+        user_id = data_manager.validate_answer_owner(answer_id)
+        data_manager.answer_vote_down_rep(user_id)
 
     return redirect(f"/question/{ans_question_id}")
 

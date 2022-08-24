@@ -420,6 +420,8 @@ def append_to_users_questions(cursor, user_id, question_id):
         """, (user_id, question_id)
     )
 
+# Users actions connections
+
 
 @connection.connection_handler
 def append_to_users_answers(cursor, user_id, answer_id):
@@ -472,3 +474,49 @@ def validate_comment_owner(cursor, comment_id):
         """, [comment_id]
     )
     return cursor.fetchone()['user_id']
+
+
+# Reputation points
+
+@connection.connection_handler
+def question_vote_up_rep(cursor, user_id):
+    cursor.execute(
+        """
+        UPDATE users
+        SET reputation = reputation + 5
+        WHERE id = (%s)
+        """, [user_id]
+    )
+
+
+@connection.connection_handler
+def question_vote_down_rep(cursor, user_id):
+    cursor.execute(
+        """
+        UPDATE users
+        SET reputation = reputation - 2
+        WHERE id = (%s)
+        """, [user_id]
+    )
+
+
+@connection.connection_handler
+def answer_vote_up_rep(cursor, user_id):
+    cursor.execute(
+        """
+        UPDATE users
+        SET reputation = reputation + 10
+        WHERE id = (%s)
+        """, [user_id]
+    )
+
+
+@connection.connection_handler
+def answer_vote_down_rep(cursor, user_id):
+    cursor.execute(
+        """
+        UPDATE users
+        SET reputation = reputation - 2
+        WHERE id = (%s)
+        """, [user_id]
+    )
