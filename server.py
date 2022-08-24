@@ -307,6 +307,12 @@ def delete_tag(question_id, tag_id):
     return redirect(f'/question/{question_id}')
 
 
+@app.route('/bonus-questions')
+def bonus_questions():
+    bonus_questions_list = data_manager.filter_bonus_questions()
+    return render_template("bonus-questions.html", bonus_questions_list=bonus_questions_list)
+
+
 if __name__ == "__main__":
     app.run(
         host='0.0.0.0',
