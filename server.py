@@ -77,10 +77,18 @@ def add_question():
 
         question_id = question["id"]
         data_manager.add_question_db(new_question=question)
+        # user data
+        username = session['username']
+        user_id = data_manager.get_userid_by_username(username)
+        data_manager.append_to_users_questions(user_id, question_id)
 
         return redirect(f"/question/{question_id}")
-
-    return render_template("add-question.html")
+    else:
+        if "username" in session:
+            return render_template("add-question.html")
+        else:
+            flash("You have to login to ask questions!", category='error')
+            return redirect('/')
 
 
 @app.route("/question/<int:question_id>", methods=["POST", "GET"])
@@ -114,11 +122,14 @@ def display_question(question_id):
 @app.route("/question_voting/<int:question_id>", methods=['POST'])
 def question_voting(question_id):
     if request.method == "POST":
-        if request.form["vote"] == "vote-up":
+        if request.form["vote"] == "vote-up" and 'username' in session:
             data_manager.modify_value_in_question(question_id=question_id, voting="vote-up")
 
-        elif request.form['vote'] == "vote-down":
+        elif request.form['vote'] == "vote-down" and 'username' in session:
             data_manager.modify_value_in_question(question_id=question_id, voting="vote-down")
+        else:
+            flash("You have to log in to vote up/vote down")
+            return redirect(f'/question/{question_id}')
 
         if request.form["page"] == "list":
             return redirect("/list")
@@ -133,7 +144,18 @@ def delete_question(question_id):
     img_path = sel_que['image']
     if img_path:
         os.remove(img_path)
-    data_manager.delete_question(question_id)
+    if 'username' in session:
+        username = session['username']
+        user_id_in_sess = data_manager.get_userid_by_username(username)
+        user_id_for_question = data_manager.validate_question_owner(question_id)
+        if user_id_in_sess == user_id_for_question:
+            data_manager.delete_question(question_id)
+        else:
+            flash("You can only delete your own questions!", category='error')
+            return redirect(f"/question/{question_id}")
+    else:
+        flash("You have to log in to delete your question", category='error')
+        return redirect(f"/question/{question_id}")
 
     return redirect("/list")
 
@@ -143,15 +165,25 @@ def edit_question(question_id):
     if request.method == "POST":
         modified_title = request.form["question"]
         modified_message = request.form["description"]
-
         data_manager.modify_value_in_question(question_id=question_id, edited_question=True, title=modified_title,
                                               message=modified_message)
-
         return redirect(f"/question/{question_id}")
-    else:
-        question_of_given_id = data_manager.get_question_by_id(question_id)
 
-    return render_template("edit-question.html", question_for_edit=question_of_given_id)
+    else:
+        # user validation
+        if 'username' in session:
+            username = session['username']
+            user_id_in_sess = data_manager.get_userid_by_username(username)
+            user_id_for_question = data_manager.validate_question_owner(question_id)
+            if user_id_in_sess == user_id_for_question:
+                question_of_given_id = data_manager.get_question_by_id(question_id)
+                return render_template("edit-question.html", question_for_edit=question_of_given_id)
+            else:
+                flash("You can only edit your own questions!", category="error")
+                return redirect(f'/question/{question_id}')
+        else:
+            flash("You have to log in to edit your question!", category="error")
+            return redirect(f'/question/{question_id}')
 
 
 @app.route("/question/<int:question_id>/new-answer", methods=["POST", "GET"])
@@ -181,10 +213,19 @@ def add_answer(question_id):
             answer['image'] = ""
 
         data_manager.add_answer_db(answer)
-
+        # user data
+        username = session['username']
+        user_id = data_manager.get_userid_by_username(username)
+        data_manager.append_to_users_answers(user_id, answer['id'])
         return redirect(f"/question/{question_id}")
 
-    return render_template("add-answer.html", question_id=question_id)
+    else:
+        if "username" in session:
+            return render_template("add-answer.html", question_id=question_id)
+        else:
+            flash("You have to login to answer a question!", category='error')
+            return redirect(f"/question/{question_id}")
+
 
 
 @app.route("/answer/<int:answer_id>/delete")
@@ -194,9 +235,20 @@ def delete_answer(answer_id):
     img_path = ans_que['image']
     if img_path:
         os.remove(img_path)
-    data_manager.delete_answer_and_comments(answer_id)
-
-    return redirect(f"/question/{question_id}")
+    # user validation
+    if 'username' in session:
+        username = session['username']
+        user_id_in_sess = data_manager.get_userid_by_username(username)
+        user_id_for_answer = data_manager.validate_answer_owner(answer_id)
+        if user_id_in_sess == user_id_for_answer:
+            data_manager.delete_answer_and_comments(answer_id)
+            return redirect(f"/question/{question_id}")
+        else:
+            flash("You can only delete your own answers!", category='error')
+            return redirect(f"/question/{question_id}")
+    else:
+        flash("You have to log in to delete your answer", category='error')
+        return redirect(f"/question/{question_id}")
 
 
 @app.route("/answer/<int:answer_id>/edit", methods=['GET', 'POST'])
@@ -209,18 +261,33 @@ def edit_answer(answer_id):
 
         return redirect(f"/question/{ans_question_id}")
     else:
-        answer_of_given_id = data_manager.get_answer_by_id(answer_id)
+        # user validation
+        if 'username' in session:
+            username = session['username']
+            user_id_in_sess = data_manager.get_userid_by_username(username)
+            user_id_for_answer = data_manager.validate_answer_owner(answer_id)
+            if user_id_in_sess == user_id_for_answer:
+                answer_of_given_id = data_manager.get_answer_by_id(answer_id)
+                return render_template("edit-answer.html", answer_for_edit=answer_of_given_id)
+            else:
+                flash("You can only edit your own answers", category="error")
+                ans_question_id = data_manager.get_answer_question_id(answer_id)
+                return redirect(f"/question/{ans_question_id}")
+        else:
+            flash("You have to log in to edit your answer")
+            ans_question_id = data_manager.get_answer_question_id(answer_id)
+            return redirect(f"/question/{ans_question_id}")
 
-    return render_template("edit-answer.html", answer_for_edit=answer_of_given_id)
+
 
 
 @app.route("/answer_voting/<int:answer_id>", methods=['POST'])
 def answer_voting(answer_id):
     ans_question_id = data_manager.get_answer_question_id(answer_id)
-    if request.form["vote"] == "vote-up":
+    if request.form["vote"] == "vote-up" and 'username' in session:
         data_manager.modify_value_in_answer(answer_id=answer_id, voting="vote-up")
 
-    elif request.form['vote'] == "vote-down":
+    elif request.form['vote'] == "vote-down" and 'username' in session:
         data_manager.modify_value_in_answer(answer_id=answer_id, voting="vote-down")
 
     return redirect(f"/question/{ans_question_id}")
@@ -251,21 +318,41 @@ def add_comment(question_id=-1, answer_id=-1):
         comment["edited_count"] = 0
 
         data_manager.add_comment_db(new_comment=comment)
+        username = session['username']
+        user_id = data_manager.get_userid_by_username(username)
+        data_manager.append_to_users_comments(user_id, comment['id'])
 
         return redirect(f"/question/{question_id}")
-
-    if question_id >= 0:
-        return render_template("add-comment.html", question_id=str(question_id))
     else:
-        return render_template("add-comment.html", answer_id=str(answer_id))
+        if "username" in session:
+            if question_id >= 0:
+                return render_template("add-comment.html", question_id=str(question_id))
+            else:
+                return render_template("add-comment.html", answer_id=str(answer_id))
+        else:
+            flash("You have to login to comment!", category='error')
+            return redirect(f"/question/{question_id}")
 
 
 @app.route("/comment/<int:comment_id>/delete")
 def delete_comment(comment_id):
     question_id = data_manager.get_comment_question_id(comment_id)
-    data_manager.delete_comment(comment_id)
+    # user validation
+    if 'username' in session:
+        username = session['username']
+        user_id_in_sess = data_manager.get_userid_by_username(username)
+        user_id_for_comment = data_manager.validate_comment_owner(comment_id)
+        if user_id_in_sess == user_id_for_comment:
+            data_manager.delete_comment(comment_id)
+            return redirect(f"/question/{question_id}")
+        else:
+            flash("You can only delete your own comment")
+            return redirect(f"/question/{question_id}")
+    else:
+        flash("You have to log in to delete your comment", category='error')
+        return redirect(f"/question/{question_id}")
 
-    return redirect(f"/question/{question_id}")
+
 
 
 @app.route("/comment/<int:comment_id>/edit", methods=['GET', 'POST'])
@@ -280,34 +367,68 @@ def edit_comment(comment_id):
 
         return redirect(f"/question/{comment_question_id}")
     else:
-        comment_of_given_id = data_manager.get_comment_by_id(comment_id)
-
-    return render_template("edit-comment.html", comment_for_edit=comment_of_given_id)
+        if 'username' in session:
+            username = session['username']
+            user_id_in_sess = data_manager.get_userid_by_username(username)
+            user_id_for_comment = data_manager.validate_comment_owner(comment_id)
+            if user_id_in_sess == user_id_for_comment:
+                comment_of_given_id = data_manager.get_comment_by_id(comment_id)
+                return render_template("edit-comment.html", comment_for_edit=comment_of_given_id)
+            else:
+                flash("You can only edit your own answers!", category="error")
+                comment_question_id = data_manager.get_comment_question_id(comment_id)
+                return redirect(f"/question/{comment_question_id}")
+        else:
+            flash("You have to log in to edit your comment!", category='error')
+            comment_question_id = data_manager.get_comment_question_id(comment_id)
+            return redirect(f"/question/{comment_question_id}")
 
 
 @app.route('/question/<int:question_id>/new-tag', methods=["POST", "GET"])
 def add_tag(question_id):
     all_tags = data_manager.get_all_tags()
     if request.method == "POST":
-        if 'custom_tag_name' in request.form:
-            tag_to_add = request.form['custom_tag_name']
-            data_manager.add_custom_tag(tag_to_add)
-            tag_id = data_manager.get_tag_id(tag_to_add)[0]['id']
-            data_manager.add_tag_to_question(question_id, tag_id)
-        elif 'tag_name' in request.form:
-            tag_to_add = request.form['tag_name']
-            tag_id = data_manager.get_tag_id(tag_to_add)[0]['id']
-            data_manager.add_tag_to_question(question_id, tag_id)
-        return redirect(f"/question/{question_id}")
+        if 'username' in session:
+            username = session['username']
+            user_id_in_sess = data_manager.get_userid_by_username(username)
+            user_id_for_question = data_manager.validate_question_owner(question_id)
+            if user_id_in_sess == user_id_for_question:
+                if 'custom_tag_name' in request.form:
+                    tag_to_add = request.form['custom_tag_name']
+                    data_manager.add_custom_tag(tag_to_add)
+                    tag_id = data_manager.get_tag_id(tag_to_add)[0]['id']
+                    data_manager.add_tag_to_question(question_id, tag_id)
+                elif 'tag_name' in request.form:
+                    tag_to_add = request.form['tag_name']
+                    tag_id = data_manager.get_tag_id(tag_to_add)[0]['id']
+                    data_manager.add_tag_to_question(question_id, tag_id)
+                return redirect(f"/question/{question_id}")
+            else:
+                flash("You can only add tags to your own questions", category="error")
+                return redirect(f"/question/{question_id}")
+        else:
+            flash("You have to log in to add a tag to your question")
+            return redirect(f"/question/{question_id}")
 
     return render_template("add-tag.html", tags=all_tags, question_id=question_id)
 
 
 @app.route('/question/<int:question_id>/tag/<int:tag_id>/delete', methods=['POST'])
 def delete_tag(question_id, tag_id):
-    data_manager.delete_tag_from_question(question_id, tag_id)
+    if 'username' in session:
+        username = session['username']
+        user_id_in_sess = data_manager.get_userid_by_username(username)
+        user_id_for_question = data_manager.validate_question_owner(question_id)
+        if user_id_in_sess == user_id_for_question:
+            data_manager.delete_tag_from_question(question_id, tag_id)
+            return redirect(f'/question/{question_id}')
+        else:
+            flash("You can only delete tags off your own question!", category='error')
+            return redirect(f'/question/{question_id}')
+    else:
+        flash("You have to be logged in to delete tags off your questions!", category='error')
+        return redirect(f'/question/{question_id}')
 
-    return redirect(f'/question/{question_id}')
 
 
 @app.route('/registration', methods=['POST', 'GET'])
@@ -351,7 +472,6 @@ def login():
 def logout():
     session.pop('username', None)
     return redirect('/')
-
 
 
 if __name__ == "__main__":

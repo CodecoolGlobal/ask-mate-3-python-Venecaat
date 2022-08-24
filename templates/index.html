@@ -16,6 +16,12 @@
                 <br>
                 <a href="/list"><button class="button">See all questions</button></a>
             </div>
+            <a href="/registration">Register an account</a><br><br>
+            <a href="/login">Login</a>
+            {% if username %}
+                <p>You are logged in as: {{username}}</p><br><br>
+                <a href="/logout">Logout</a><br>
+            {% endif %}
             <div class="latest-questions-title">
                 <h2>Latest Questions:</h2>
             </div>
