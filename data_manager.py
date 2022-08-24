@@ -359,7 +359,7 @@ def verify_password(plain_text_password, hashed_password):
 def get_all_user_data(cursor):
     cursor.execute(
         """
-        SELECT username, password FROM users
+        SELECT * FROM users
         """
     )
     return cursor.fetchall()
@@ -398,3 +398,77 @@ def add_user(cursor, username, hashed_password, reg_date):
         """,
         (username, hashed_password, reg_date)
     )
+
+
+@connection.connection_handler
+def get_userid_by_username(cursor, username):
+    cursor.execute(
+        """
+        SELECT id FROM users
+        WHERE username = %(u_n)s
+        """, {'u_n': username}
+    )
+    return cursor.fetchone()['id']
+
+
+@connection.connection_handler
+def append_to_users_questions(cursor, user_id, question_id):
+    cursor.execute(
+        """
+        INSERT INTO users_questions
+        VALUES ((%s), (%s))
+        """, (user_id, question_id)
+    )
+
+
+@connection.connection_handler
+def append_to_users_answers(cursor, user_id, answer_id):
+    cursor.execute(
+        """
+        INSERT INTO users_answers
+        VALUES ((%s), (%s))
+        """, (user_id, answer_id)
+    )
+
+
+@connection.connection_handler
+def append_to_users_comments(cursor, user_id, comment_id):
+    cursor.execute(
+        """
+        INSERT INTO users_comments
+        VALUES ((%s), (%s))
+        """, (user_id, comment_id)
+    )
+
+
+@connection.connection_handler
+def validate_question_owner(cursor, question_id):
+    cursor.execute(
+        """
+        SELECT user_id FROM users_questions
+        WHERE question_id = (%s)
+        """, [question_id]
+    )
+    return cursor.fetchone()['user_id']
+
+
+@connection.connection_handler
+def validate_answer_owner(cursor, answer_id):
+    cursor.execute(
+        """
+        SELECT user_id FROM users_answers
+        WHERE answer_id = (%s)
+        """, [answer_id]
+    )
+    return cursor.fetchone()['user_id']
+
+
+@connection.connection_handler
+def validate_comment_owner(cursor, comment_id):
+    cursor.execute(
+        """
+        SELECT user_id FROM users_comments
+        WHERE comment_id = (%s)
+        """, [comment_id]
+    )
+    return cursor.fetchone()['user_id']
