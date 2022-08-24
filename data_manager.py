@@ -343,7 +343,31 @@ def get_tags_for_question(cursor, question_id):
     return cursor.fetchall()
 
 
-@connection.connection_handler
-def filter_bonus_questions(cursor):
+def get_bonus_questions():
     bonus_questions_list = bonus_questions.SAMPLE_QUESTIONS
     return bonus_questions_list
+
+
+# def filter_bonus_questions(filter_phrase=""):
+#     bonus_questions_list = bonus_questions.SAMPLE_QUESTIONS
+#     if filter_phrase:
+#         bonus_questions_filtered_list = []
+#         for que in bonus_questions_list:
+#             if filter_phrase[0] == "!":
+#                 try:
+#                     if filter_phrase[1:filter_phrase.index(":")].lower() == "description":
+#                         if filter_phrase[filter_phrase.index(":") + 1:] not in que["description"]:
+#                             bonus_questions_filtered_list.append(que)
+#                 except ValueError:
+#                     if filter_phrase[1:] not in que["title"]:
+#                         bonus_questions_filtered_list.append(que)
+#             else:
+#                 try:
+#                     if filter_phrase[:filter_phrase.index(":")].lower() == "description":
+#                         if filter_phrase[filter_phrase.index(":") + 1:] in que["description"]:
+#                             bonus_questions_filtered_list.append(que)
+#                 except ValueError:
+#                     if filter_phrase in que["title"]:
+#                         bonus_questions_filtered_list.append(que)
+#         return bonus_questions_filtered_list
+#     return bonus_questions_list
