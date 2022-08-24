@@ -309,8 +309,9 @@ def delete_tag(question_id, tag_id):
 
 @app.route('/bonus-questions')
 def bonus_questions():
-    bonus_questions_list = data_manager.filter_bonus_questions()
-    return render_template("bonus-questions.html", bonus_questions_list=bonus_questions_list)
+    bonus_questions_list = data_manager.get_bonus_questions()
+
+    return render_template("bonus-questions.html", questions=bonus_questions_list)
 
 
 if __name__ == "__main__":
