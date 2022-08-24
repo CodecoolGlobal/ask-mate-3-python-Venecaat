@@ -1,6 +1,6 @@
 import os
 
-import connection
+import connection, bonus_questions
 from datetime import datetime
 
 
@@ -341,3 +341,9 @@ def get_tags_for_question(cursor, question_id):
         WHERE question_tag.question_id = {question_id};
         """)
     return cursor.fetchall()
+
+
+@connection.connection_handler
+def filter_bonus_questions(cursor):
+    bonus_questions_list = bonus_questions.SAMPLE_QUESTIONS
+    return bonus_questions_list
