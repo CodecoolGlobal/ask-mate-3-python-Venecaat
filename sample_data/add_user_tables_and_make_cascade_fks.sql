@@ -40,8 +40,8 @@ DROP TABLE IF EXISTS users_comments;
 
 CREATE TABLE IF NOT EXISTS users (
     id serial NOT NULL,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(50) NOT NULL,
+    username VARCHAR UNIQUE NOT NULL,
+    password VARCHAR NOT NULL,
     registration_date DATE NOT NULL DEFAULT CURRENT_DATE,
     num_of_questions INTEGER DEFAULT 0,
     num_of_answers INTEGER DEFAULT 0,
