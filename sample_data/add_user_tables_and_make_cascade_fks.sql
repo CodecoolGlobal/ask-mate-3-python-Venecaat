@@ -45,7 +45,8 @@ CREATE TABLE IF NOT EXISTS users (
     registration_date DATE NOT NULL DEFAULT CURRENT_DATE,
     num_of_questions INTEGER DEFAULT 0,
     num_of_answers INTEGER DEFAULT 0,
-    num_of_comments INTEGER DEFAULT 0
+    num_of_comments INTEGER DEFAULT 0,
+    reputation INTEGER DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS users_questions (
