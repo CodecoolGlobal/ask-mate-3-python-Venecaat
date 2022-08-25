@@ -94,7 +94,7 @@ def add_question():
         return redirect(f"/question/{question_id}")
     else:
         if "username" in session:
-            return render_template("add-question.html", username = session['username'])
+            return render_template("add-question.html", username=session['username'])
         else:
             flash("You have to login to ask questions!", category='error')
             return redirect('/')
@@ -135,8 +135,8 @@ def display_question(question_id):
         username = escape(session['username'])
         return render_template('question.html', question_of_given_id=question_of_given_id, answers_to_question=answers,
                                comments_for_question=comments_for_question, comments_for_answers=comments_for_answers,
-                               question_id=question_id, tags_for_question=tags_for_question, all_tags=all_tags, username=username,
-                               que_aut_same_as_log_user=que_aut_same_as_log_user)
+                               question_id=question_id, tags_for_question=tags_for_question, all_tags=all_tags,
+                               username=username, que_aut_same_as_log_user=que_aut_same_as_log_user)
 
     return render_template('question.html', question_of_given_id=question_of_given_id, answers_to_question=answers,
                            comments_for_question=comments_for_question, comments_for_answers=comments_for_answers,
@@ -279,7 +279,6 @@ def add_answer(question_id):
             return redirect(f"/question/{question_id}")
 
 
-
 @app.route("/answer/<int:answer_id>/delete")
 def delete_answer(answer_id):
     question_id = data_manager.get_answer_question_id(answer_id)
@@ -302,8 +301,6 @@ def delete_answer(answer_id):
             data_manager.remove_stats(user_id_in_sess, 'num_of_answers')
             for u_id in user_ids_for_comments:
                 data_manager.remove_stats(u_id, 'num_of_comments')
-
-
 
             return redirect(f"/question/{question_id}")
         else:
@@ -340,7 +337,6 @@ def edit_answer(answer_id):
             flash("You have to log in to edit your answer")
             ans_question_id = data_manager.get_answer_question_id(answer_id)
             return redirect(f"/question/{ans_question_id}")
-
 
 
 @app.route("/answer_voting/<int:answer_id>", methods=['POST'])
@@ -423,8 +419,6 @@ def delete_comment(comment_id):
     else:
         flash("You have to log in to delete your comment", category='error')
         return redirect(f"/question/{question_id}")
-
-
 
 
 @app.route("/comment/<int:comment_id>/edit", methods=['GET', 'POST'])
@@ -563,7 +557,6 @@ def users_table():
     return render_template('users-table.html', all_user_data=all_user_data)
 
 
-
 @app.route('/user-list/<username>', methods=['GET'])
 def user_details(username):
     user_id = data_manager.get_userid_by_username(username)
@@ -578,6 +571,13 @@ def user_details(username):
     return render_template('user-details.html', user_data=user_data, users_questions=users_questions,
                            users_answers=users_answers, users_comments=users_comments)
 
+
+@app.route('/mark_answer/<int:answer_id>')
+def mark_answer_accepted(answer_id):
+    question_id = data_manager.get_answer_question_id(answer_id)
+    data_manager.modify_value_in_answer(answer_id=answer_id, accept=True)
+
+    return redirect(f'/question/{question_id}')
 
 
 if __name__ == "__main__":

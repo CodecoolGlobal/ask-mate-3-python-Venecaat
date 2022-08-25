@@ -240,9 +240,11 @@
                             </div>
                             <div class="answer-navigation-buttons">
                                 {% if username  %}
+                                <a href="/mark_answer/{{ ans['id'] }}/edit">
                                     <button type="submit" class="circle-button" id="check-button">
                                         <svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M9.993 19.421 3.286 12.58l1.428-1.401 5.293 5.4 9.286-9.286 1.414 1.414L9.993 19.421z"/></svg>
                                     </button>
+                                </a>
                                 <a href="/answer/{{ ans['id'] }}/edit">
                                     <button class="circle-button" id="edit-button">
                                         <svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.7 5.2a1.024 1.024 0 0 1 0 1.448l-2.626 2.628-3.35-3.35L17.35 3.3a1.024 1.024 0 0 1 1.448 0zm-4.166 5.614-3.35-3.35-8.509 8.511L3 21l5.025-1.675z"/></svg>

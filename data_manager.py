@@ -228,13 +228,15 @@ def modify_value_in_question(cursor, question_id, voting="", view="", edited_que
 
 
 @connection.connection_handler
-def modify_value_in_answer(cursor, answer_id, voting="", edited_answer=False, message=""):
+def modify_value_in_answer(cursor, answer_id, voting="", edited_answer=False, message="", accept=False):
     if voting == "vote-up":
         cursor.execute(f"UPDATE answer SET vote_number = vote_number + 1 WHERE id = {answer_id}")
     elif voting == "vote-down":
         cursor.execute(f"UPDATE answer SET vote_number = vote_number - 1 WHERE id = {answer_id}")
     if edited_answer:
         cursor.execute(f"UPDATE answer SET message = '{message}' WHERE id = {answer_id}")
+    if accept:
+        cursor.execute(f"UPDATE answer SET accepted = {accept} WHERE id = {answer_id}")
 
 
 @connection.connection_handler
@@ -390,7 +392,7 @@ def get_one_user_data(cursor, user_id):
 
 
 @connection.connection_handler
-def check_if_user_exists(self, username):
+def check_if_user_exists(username):
     exists = False
     all_user_data = get_all_user_data()
     for user_data in all_user_data:
@@ -401,7 +403,7 @@ def check_if_user_exists(self, username):
 
 
 @connection.connection_handler
-def get_hashed_password_by_username(self, username):
+def get_hashed_password_by_username(username):
     all_user_data = get_all_user_data()
     for users_data in all_user_data:
         if username in users_data['username']:
