@@ -23,7 +23,6 @@ def main_page():
     return render_template("index.html", questions=latest_qs)
 
 
-
 @app.route("/list", methods=['GET', 'POST'])
 def list_questions():
     if "sort_by" in request.url:
@@ -56,9 +55,12 @@ def list_questions():
 def add_question():
     question = {}
 
-
     if request.method == "POST":
-        question["id"] = data_manager.get_next_question_id()
+        table_has_data = data_manager.check_if_table_has_records(table_name="question")["exists"]
+        if table_has_data:
+            question["id"] = data_manager.get_next_question_id()
+        else:
+            question["id"] = 0
         question["submission_time"] = data_manager.get_time()
         question["view_number"] = 0
         question["vote_number"] = 0
@@ -223,7 +225,11 @@ def add_answer(question_id):
     answer = {}
 
     if request.method == "POST":
-        answer["id"] = data_manager.get_next_answer_id()
+        table_has_data = data_manager.check_if_table_has_records(table_name="answer")["exists"]
+        if table_has_data:
+            answer["id"] = data_manager.get_next_answer_id()
+        else:
+            answer["id"] = 0
         answer["submission_time"] = data_manager.get_time()
         answer["vote_number"] = 0
         answer["question_id"] = question_id
@@ -353,7 +359,11 @@ def search():
 def add_comment(question_id=-1, answer_id=-1):
     comment = {}
     if request.method == "POST":
-        comment["id"] = data_manager.get_next_comment_id()
+        table_has_data = data_manager.check_if_table_has_records(table_name="comment")["exists"]
+        if table_has_data:
+            comment["id"] = data_manager.get_next_comment_id()
+        else:
+            comment["id"] = 0
         if question_id >= 0:
             comment["question_id"] = question_id
         else:
