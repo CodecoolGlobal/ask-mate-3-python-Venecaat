@@ -1,8 +1,10 @@
 import os
-
-import connection, bonus_questions
+import bcrypt
+import connection
 from datetime import datetime
-
+import psycopg2
+from psycopg2 import sql
+import bonus_questions
 
 # QUESTION_COLUMNS = ['id', 'submission_time', "view_number", "vote_number", "title", "message", "image"]
 # ANSWER_COLUMNS = ["id", "submission_time", "vote_number", "question_id", "message", "image"]
@@ -140,14 +142,14 @@ def get_next_comment_id(cursor):
 def delete_question(cursor, question_id):
     cursor.execute(f"SELECT image FROM answer WHERE question_id = {question_id}")
     answer_images = cursor.fetchall()
-    # cursor.execute(f"""
-    # DELETE FROM comment WHERE answer_id IN
-    # (SELECT answer.id FROM answer JOIN question ON answer.question_id = question.id
-    #  WHERE answer.question_id = {question_id})
-    # """)
-    # cursor.execute(f"DELETE FROM comment WHERE question_id = {question_id}")
-    # cursor.execute(f"DELETE FROM question_tag WHERE question_id = {question_id}")
-    # cursor.execute(f"DELETE FROM answer WHERE question_id = {question_id}")
+    cursor.execute(f"""
+    DELETE FROM comment WHERE answer_id IN
+    (SELECT answer.id FROM answer JOIN question ON answer.question_id = question.id
+     WHERE answer.question_id = {question_id})
+    """)
+    cursor.execute(f"DELETE FROM comment WHERE question_id = {question_id}")
+    cursor.execute(f"DELETE FROM question_tag WHERE question_id = {question_id}")
+    cursor.execute(f"DELETE FROM answer WHERE question_id = {question_id}")
     cursor.execute(f"DELETE FROM question WHERE id = {question_id}")
 
     for d in answer_images:
@@ -343,31 +345,269 @@ def get_tags_for_question(cursor, question_id):
     return cursor.fetchall()
 
 
+# --------------------------------------------------------------------------------------
+# Registration and login
+def hash_password(plain_text_password):
+    hashed_bytes = bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt())
+    return hashed_bytes.decode('utf-8')
+
+
+def verify_password(plain_text_password, hashed_password):
+    hashed_bytes_password = hashed_password.encode('utf-8')
+    return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_bytes_password)
+
+
+@connection.connection_handler
+def get_all_user_data(cursor):
+    cursor.execute(
+        """
+        SELECT * FROM users
+        """
+    )
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def check_if_user_exists(self, username):
+    exists = False
+    all_user_data = get_all_user_data()
+    for user_data in all_user_data:
+        if username in user_data['username']:
+            exists = True
+
+    return exists
+
+
+@connection.connection_handler
+def get_hashed_password_by_username(self, username):
+    all_user_data = get_all_user_data()
+    for users_data in all_user_data:
+        if username in users_data['username']:
+            hashed_password = users_data['password']
+            return hashed_password
+        else:
+            hashed_password = '$2y$10$QgwruVxXwgw5SAQSVQuAkeRksgXPcIb7aCoiywgxYPL0eAdYRpbJG'
+
+    return hashed_password
+
+
+@connection.connection_handler
+def add_user(cursor, username, hashed_password, reg_date):
+    cursor.execute(
+        """
+        INSERT INTO users (username, password, registration_date)
+        VALUES (%s, %s, %s)
+        """,
+        (username, hashed_password, reg_date)
+    )
+
+
+@connection.connection_handler
+def get_userid_by_username(cursor, username):
+    cursor.execute(
+        """
+        SELECT id FROM users
+        WHERE username = %(u_n)s
+        """, {'u_n': username}
+    )
+    return cursor.fetchone()['id']
+
+
+@connection.connection_handler
+def append_to_users_questions(cursor, user_id, question_id):
+    cursor.execute(
+        """
+        INSERT INTO users_questions
+        VALUES ((%s), (%s))
+        """, (user_id, question_id)
+    )
+
+# Users actions connections
+
+
+@connection.connection_handler
+def append_to_users_answers(cursor, user_id, answer_id):
+    cursor.execute(
+        """
+        INSERT INTO users_answers
+        VALUES ((%s), (%s))
+        """, (user_id, answer_id)
+    )
+
+
+@connection.connection_handler
+def append_to_users_comments(cursor, user_id, comment_id):
+    cursor.execute(
+        """
+        INSERT INTO users_comments
+        VALUES ((%s), (%s))
+        """, (user_id, comment_id)
+    )
+
+
+@connection.connection_handler
+def validate_question_owner(cursor, question_id):
+    cursor.execute(
+        """
+        SELECT user_id FROM users_questions
+        WHERE question_id = (%s)
+        """, [question_id]
+    )
+    return cursor.fetchone()['user_id']
+
+
+@connection.connection_handler
+def validate_answer_owner(cursor, answer_id):
+    cursor.execute(
+        """
+        SELECT user_id FROM users_answers
+        WHERE answer_id = (%s)
+        """, [answer_id]
+    )
+    return cursor.fetchone()['user_id']
+
+
+@connection.connection_handler
+def validate_comment_owner(cursor, comment_id):
+    cursor.execute(
+        """
+        SELECT user_id FROM users_comments
+        WHERE comment_id = (%s)
+        """, [comment_id]
+    )
+    return cursor.fetchone()['user_id']
+
+
+# User stats
+
+@connection.connection_handler
+def question_vote_up_rep(cursor, user_id):
+    cursor.execute(
+        """
+        UPDATE users
+        SET reputation = reputation + 5
+        WHERE id = (%s)
+        """, [user_id]
+    )
+
+
+@connection.connection_handler
+def question_vote_down_rep(cursor, user_id):
+    cursor.execute(
+        """
+        UPDATE users
+        SET reputation = reputation - 2
+        WHERE id = (%s)
+        """, [user_id]
+    )
+
+
+@connection.connection_handler
+def answer_vote_up_rep(cursor, user_id):
+    cursor.execute(
+        """
+        UPDATE users
+        SET reputation = reputation + 10
+        WHERE id = (%s)
+        """, [user_id]
+    )
+
+
+@connection.connection_handler
+def answer_vote_down_rep(cursor, user_id):
+    cursor.execute(
+        """
+        UPDATE users
+        SET reputation = reputation - 2
+        WHERE id = (%s)
+        """, [user_id]
+    )
+
+
+@connection.connection_handler
+def add_stats(cursor, user_id, column_name):
+    cursor.execute(
+        psycopg2.sql.SQL(
+            """
+            UPDATE users
+            SET {column_name} = {column_name} + 1
+            WHERE id = %s
+            """
+        ).format(
+            column_name=psycopg2.sql.Identifier(column_name)
+        )
+        , [user_id]
+    )
+
+
+@connection.connection_handler
+def remove_stats(cursor, user_id, column_name):
+    cursor.execute(
+        psycopg2.sql.SQL(
+            """
+            UPDATE users
+            SET {column_name} = {column_name} - 1
+            WHERE id = %s
+            """
+        ).format(
+            column_name=psycopg2.sql.Identifier(column_name)
+        )
+        , [user_id]
+    )
+
+
+@connection.connection_handler
+def get_all_comment_ids_for_answer(cursor, answer_id):
+    cursor.execute(
+        """
+        SELECT comment.id FROM comment
+        JOIN answer ON answer.id = comment.answer_id
+        WHERE comment.answer_id = (%s)
+        GROUP BY answer.id, comment.id
+        """, [answer_id]
+    )
+    real_dict = cursor.fetchall()
+    comment_ids = []
+    for c_id in real_dict:
+        comment_ids.append(c_id['id'])
+    return comment_ids
+
+
+@connection.connection_handler
+def get_all_answer_ids_for_question(cursor, question_id):
+    cursor.execute(
+        """
+        SELECT answer.id FROM answer
+        JOIN question ON question.id = answer.question_id
+        WHERE answer.question_id = (%s)
+        GROUP BY question.id, answer.id
+        """, [question_id]
+    )
+    real_dict = cursor.fetchall()
+    answer_ids = []
+    for a_id in real_dict:
+        answer_ids.append(a_id['id'])
+    return answer_ids
+
+
+@connection.connection_handler
+def get_all_comment_ids_for_question(cursor, question_id):
+    cursor.execute(
+        """
+        SELECT comment.id FROM comment
+        JOIN question ON question.id = comment.question_id
+        WHERE comment.question_id = (%s)
+        GROUP BY question.id, comment.id
+        """, [question_id]
+    )
+    real_dict = cursor.fetchall()
+    comment_ids = []
+    for c_id in real_dict:
+        comment_ids.append(c_id['id'])
+    return comment_ids
+
+
+
 def get_bonus_questions():
     bonus_questions_list = bonus_questions.SAMPLE_QUESTIONS
     return bonus_questions_list
-
-
-# def filter_bonus_questions(filter_phrase=""):
-#     bonus_questions_list = bonus_questions.SAMPLE_QUESTIONS
-#     if filter_phrase:
-#         bonus_questions_filtered_list = []
-#         for que in bonus_questions_list:
-#             if filter_phrase[0] == "!":
-#                 try:
-#                     if filter_phrase[1:filter_phrase.index(":")].lower() == "description":
-#                         if filter_phrase[filter_phrase.index(":") + 1:] not in que["description"]:
-#                             bonus_questions_filtered_list.append(que)
-#                 except ValueError:
-#                     if filter_phrase[1:] not in que["title"]:
-#                         bonus_questions_filtered_list.append(que)
-#             else:
-#                 try:
-#                     if filter_phrase[:filter_phrase.index(":")].lower() == "description":
-#                         if filter_phrase[filter_phrase.index(":") + 1:] in que["description"]:
-#                             bonus_questions_filtered_list.append(que)
-#                 except ValueError:
-#                     if filter_phrase in que["title"]:
-#                         bonus_questions_filtered_list.append(que)
-#         return bonus_questions_filtered_list
-#     return bonus_questions_list
