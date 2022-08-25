@@ -58,10 +58,10 @@ function search(key) {
     questions_html += "</tr>";
         for (let que of filtered_questions) {
             questions_html += "<tr>";
-            questions_html += "<td class='bonus_que_value'>" + que.title + "</td>" +
-                              "<td class='bonus_que_value'>" + que.description + "</td>" +
-                              "<td class='bonus_que_value'>" + que.view_number + "</td>" +
-                              "<td class='bonus_que_value'>" + que.vote_number + "</td>";
+            questions_html += "<td class='bonus_que_title'>" + que.title + "</td>" +
+                              "<td class='bonus_que_desc'>" + que.description + "</td>" +
+                              "<td class='bonus_que_views'>" + que.view_number + "</td>" +
+                              "<td class='bonus_que_votes'>" + que.vote_number + "</td>";
             questions_html += "</tr>";
         }
     questions_html += "</table>";

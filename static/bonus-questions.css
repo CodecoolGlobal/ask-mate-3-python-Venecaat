@@ -1,0 +1,27 @@
+.bonus_que {
+    margin: auto;
+    border-collapse: collapse;
+    width: 70%;
+}
+.bonus_que tr:nth-child(odd){
+    background-color: #1c1c1c;
+}
+.bonus_que tr:nth-child(even){
+    background-color: #262626;
+}
+.bonus_que_title {
+    padding: 10px;
+    text-align: left;
+}
+.bonus_que_desc {
+    padding: 10px;
+    text-align: left;
+}
+.bonus_que_views{
+    min-width: 32px;
+    max-width: 32px
+}
+.bonus_que_header {
+    padding: 0px 10px 10px 10px;
+    background-color: #161616;
+}
