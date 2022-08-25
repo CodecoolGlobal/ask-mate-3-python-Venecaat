@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TAGS</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>Tag name</th>
+            <th>Times used</th>
+        </tr>
+        {% for tag in tags %}
+        <tr>
+            {% for k,v in tag.items() %}
+                <td>{{ v }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+</html>

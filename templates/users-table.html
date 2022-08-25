@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All users' data</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>User ID</th>
+            <th>Username</th>
+            <th>Registration date</th>
+            <th>Number of asked questions</th>
+            <th>Number of answers</th>
+            <th>Number of comments</th>
+            <th>Reputation</th>
+        </tr>
+        {% for data in all_user_data %}
+        <tr>
+            {% for k,v in data.items() %}
+                {% if k == 'username' %}
+                    <td><a href="/user-list/{{ v }}">{{ v }}</a></td>
+                {% else %}
+                    <td>{{ v }}</td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+</html>

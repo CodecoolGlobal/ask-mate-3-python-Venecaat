@@ -142,11 +142,18 @@ def get_next_comment_id(cursor):
 def delete_question(cursor, question_id):
     cursor.execute(f"SELECT image FROM answer WHERE question_id = {question_id}")
     answer_images = cursor.fetchall()
+    cursor.execute(f"""
+    DELETE FROM comment WHERE answer_id IN
+    (SELECT answer.id FROM answer JOIN question ON answer.question_id = question.id
+     WHERE answer.question_id = {question_id})
+    """)
+    cursor.execute(f"DELETE FROM comment WHERE question_id = {question_id}")
+    cursor.execute(f"DELETE FROM question_tag WHERE question_id = {question_id}")
+    cursor.execute(f"DELETE FROM answer WHERE question_id = {question_id}")
     cursor.execute(f"DELETE FROM question WHERE id = {question_id}")
 
     for d in answer_images:
-        if d['image']:
-            os.remove(d['image'])
+        os.remove(d['image'])
 
 
 @connection.connection_handler
@@ -385,13 +392,13 @@ def get_hashed_password_by_username(self, username):
 
 
 @connection.connection_handler
-def add_user(cursor, username, hashed_password):
+def add_user(cursor, username, hashed_password, reg_date):
     cursor.execute(
         """
-        INSERT INTO users (username, password)
-        VALUES (%s, %s)
+        INSERT INTO users (username, password, registration_date)
+        VALUES (%s, %s, %s)
         """,
-        (username, hashed_password)
+        (username, hashed_password, reg_date)
     )
 
 
@@ -598,6 +605,58 @@ def get_all_comment_ids_for_question(cursor, question_id):
     for c_id in real_dict:
         comment_ids.append(c_id['id'])
     return comment_ids
+
+
+@connection.connection_handler
+def get_questions_of_user(cursor, user_id):
+    cursor.execute(
+        """
+        SELECT question.message, question.id
+        FROM question
+        JOIN users_questions ON users_questions.question_id = question.id
+        WHERE users_questions.user_id = (%s)
+        """, [user_id]
+    )
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def get_answers_of_user(cursor, user_id):
+    cursor.execute(
+        """
+        SELECT answer.message, answer.id
+        FROM answer
+        JOIN users_answers ON users_answers.answer_id = answer.id
+        WHERE users_answers.user_id = (%s)
+        """, [user_id]
+    )
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def get_comments_of_user(cursor, user_id):
+    cursor.execute(
+        """
+        SELECT comment.message, comment.id
+        FROM comment
+        JOIN users_comments ON users_comments.comment_id = comment.id
+        WHERE users_comments.user_id = (%s)
+        """, [user_id]
+    )
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def question_tag_count(cursor):
+    cursor.execute(
+        """
+        SELECT tag.name, COUNT(question_id)
+        FROM question_tag
+        JOIN tag ON tag.id = question_tag.tag_id
+        GROUP BY tag.name
+        """
+    )
+    return cursor.fetchall()
 
 
 def get_bonus_questions():

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>User ID</th>
+            <th>Username</th>
+            <th>Registration date</th>
+            <th>Number of asked questions</th>
+            <th>Number of answers</th>
+            <th>Number of comments</th>
+            <th>Reputation</th>
+        </tr>
+        {% for data in user_data %}
+        <tr>
+            {% for k,v in data.items() %}
+                <td>{{ v }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    <p>These are all your questions:</p><br>
+    <div>
+        {% for questions in users_questions %}
+            {% for k,v in questions.items() %}
+                {% if k == 'id' %}
+                    <a href="/question/{{ v }}">go to the question</a>
+                {% else %}
+                    <p>{{ v }}</p>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+    <br>
+    <p>These are all your answers:</p><br>
+    <div>
+        {% for answers in users_answers %}
+            {% for k,v in answers.items() %}
+                {% if k == 'id' %}
+                    <a href="/answer/{{ v }}/edit">go to the answer</a>
+                {% else %}
+                    <p>{{ v }}</p>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+    <br>
+    <p>These are all your comments:</p><br>
+    <div>
+        {% for comments in users_comments %}
+            {% for k,v in comments.items() %}
+                {% if k == 'id' %}
+                    <a href="/comment/{{ v }}/edit">go to the comment</a>
+                {% else %}
+                    <p>{{ v }}</p>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+</body>
+</html>
