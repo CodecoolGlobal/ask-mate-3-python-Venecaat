@@ -564,6 +564,7 @@ def user_details(username):
     users_questions = data_manager.get_questions_of_user(user_id)
     users_answers = data_manager.get_answers_of_user(user_id)
     users_comments = data_manager.get_comments_of_user(user_id)
+
     if 'username' in session:
         username = escape(session['username'])
         return render_template('user-details.html', user_data=user_data, users_questions=users_questions,

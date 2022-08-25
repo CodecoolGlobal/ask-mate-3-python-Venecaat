@@ -43,13 +43,11 @@
                         <th class="user-table-header">Number of comments</th>
                         <th class="user-table-header">Reputation</th>
                     </tr>
-                    {% for data in user_data %}
                     <tr>
-                        {% for k,v in data.items() %}
-                            <td>{{ v }}</td>
-                        {% endfor %}
-                    </tr>
+                    {% for k,v in user_data.items() %}
+                        <td>{{ v }}</td>
                     {% endfor %}
+                    </tr>
                 </table>
             </section>
             {% if users_questions %}
