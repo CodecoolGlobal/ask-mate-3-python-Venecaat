@@ -535,6 +535,12 @@ def user_details(username):
                            users_answers=users_answers, users_comments=users_comments)
 
 
+@app.route('/tags', methods=['GET'])
+def tag_count():
+    tags = data_manager.question_tag_count()
+    return render_template('tags.html', tags=tags)
+
+
 if __name__ == "__main__":
     app.run(
         host='0.0.0.0',

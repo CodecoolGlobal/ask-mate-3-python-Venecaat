@@ -680,7 +680,17 @@ def get_comments_of_user(cursor, user_id):
     return cursor.fetchall()
 
 
-
+@connection.connection_handler
+def question_tag_count(cursor):
+    cursor.execute(
+        """
+        SELECT tag.name, COUNT(question_id)
+        FROM question_tag
+        JOIN tag ON tag.id = question_tag.tag_id
+        GROUP BY tag.name
+        """
+    )
+    return cursor.fetchall()
 
 
 def get_bonus_questions():
