@@ -537,6 +537,7 @@ def users_table():
     return render_template('users-table.html', all_user_data=all_user_data)
 
 
+
 @app.route('/user-list/<username>', methods=['GET'])
 def user_details(username):
     user_id = data_manager.get_userid_by_username(username)
