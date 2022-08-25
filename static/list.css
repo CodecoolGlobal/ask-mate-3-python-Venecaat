@@ -20,7 +20,7 @@
     max-width: 8em;
     max-height: 2em;
 }
-.search-button{
+.search-button, change-font-size-button{
     background-color: #262626;
 }
 .sort-by-label {
