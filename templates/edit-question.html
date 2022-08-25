@@ -8,12 +8,23 @@
     <body>
         <main class="list-main-div">
             <nav class="navbar">
-                <div class="home-button-container">
-                    <a href="/">
-                    <button button name="home-button" id="home-button"><img src="/static/resources/images/logo.png" alt="home-icon"></button>
-                    </a>
+                <div class="navbar-left-side">
+                    <div class="home-button-container">
+                        <a href="/">
+                        <button button name="home-button" id="home-button"><img src="/static/resources/images/logo.png" alt="home-icon"></button>
+                        </a>
+                    </div>
+                    <h1 class="main-title">Jamaican <span style="color: seagreen">Q</span>&<span style="color: goldenrod">A</span></h1>
                 </div>
-                <h1 class="main-title">Jamaican <span style="color: seagreen">Q</span>&<span style="color: goldenrod">A</span></h1>
+                <div class="navbar-right-side">
+                    {% if username %}
+                        <p>You are logged in as: <b>{{username}}</b></p>
+                    <a class="logout-button" href="/logout"><button class="button">Log out</button></a>
+                    {% else %}
+                        <a href="/login"><button class="button">Log in</button></a>
+                        <a href="/registration"><button class="button">Register</button></a>
+                    {% endif %}
+                </div>
             </nav>
             <section class="page-body">
                 <h1>Submit your Question here</h1>
