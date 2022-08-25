@@ -19,24 +19,24 @@ function search(key) {
         for (let que of bonus_questions) {
             if (filter_text[0] === "!") {
                 if (filter_text.indexOf("description:", 1) === 1) {
-                    if (!que.description.includes(filter_text.substring(filter_text.indexOf(":")))) {
+                    if (!que.description.toLowerCase().includes(filter_text.substring(filter_text.indexOf(":") + 1))) {
                         filtered_questions.push(que);
                     }
                 }
                 else {
-                    if (!que.title.includes(filter_text.substring(1))) {
+                    if (!que.title.toLowerCase().includes(filter_text.substring(1))) {
                         filtered_questions.push(que);
                     }
                 }
             }
             else {
                 if (filter_text.indexOf("description:") === 0) {
-                    if (que.description.includes(filter_text.substring(filter_text.indexOf(":")))) {
+                    if (que.description.toLowerCase().includes(filter_text.substring(filter_text.indexOf(":") + 1))) {
                         filtered_questions.push(que);
                     }
                 }
                 else {
-                    if (que.title.includes(filter_text)) {
+                    if (que.title.toLowerCase().includes(filter_text)) {
                         filtered_questions.push(que);
                     }
                 }
