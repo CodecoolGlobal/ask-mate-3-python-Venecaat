@@ -1,0 +1,84 @@
+.main-body{
+    padding-top: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.profile-information-container{
+    width: 70%;
+}
+.profile-title-container {
+    display: flex;
+    align-items: flex-start;
+}
+.user-table-container{
+    display: flex;
+    justify-content: center;
+}
+
+.user-table {
+    width: 100%;
+    margin: auto;
+    border-collapse: collapse;
+}
+
+td{
+    height: 32px;
+}
+
+.user-table tr:nth-child(odd){
+    background-color: #1c1c1c;
+}
+
+.user-table tr:nth-child(even){
+    background-color: #262626;
+}
+
+.user-table-header{
+    padding: 10px;
+    text-align: left;
+    background-color: #161616 !important;
+}
+
+.user-questions-title-container{
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+}
+
+.user-answer-title-container{
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+}
+
+.user-answer-comment-container{
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+}
+
+.user-question{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.user-question:nth-child(odd){
+    background-color: #1c1c1c;
+}
+
+.user-question:nth-child(even){
+    background-color: #262626;
+}
+.user-question:nth-child(even)>a>button{
+    background-color: #262626;
+    border-color: #262626;
+}
+.user-question:nth-child(even)>a>button:hover {
+    border-radius: 25px;
+    border-width: 1px !important;
+    border: solid;
+    border-color: #c5c5c5;
+    background-color: #383838;
+}

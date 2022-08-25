@@ -1,0 +1,31 @@
+.main-body{
+    padding-top: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.user-table-container{
+    display: flex;
+    justify-content: center;
+}
+
+.user-table {
+    margin: auto;
+    border-collapse: collapse;
+    width: 70%;
+}
+td{
+    height: 32px;
+}
+.user-table tr:nth-child(odd){
+    background-color: #1c1c1c;
+}
+.user-table tr:nth-child(even){
+    background-color: #262626;
+}
+.user-table-header{
+    padding: 10px;
+    text-align: left;
+    background-color: #161616 !important;
+}

@@ -13,9 +13,44 @@
     align-items: center;
     justify-content: flex-start;
 }
+.tags-title {
+    width: 70%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.tags-title>h2{
+    display: flex;
+    justify-content: flex-start;
+}
+
 .latest-questions-title{
     width: 70%;
     margin: auto;
     display: flex;
     justify-content: flex-start;
+}
+
+.index-tags-container{
+    overflow: visible;
+    overflow-wrap: anywhere;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+}
+.index-tag{
+    margin-right: 2px;
+    margin-left: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-width: 2px;
+    border-style: solid;
+    color: #757575;
+    border-color: #545454;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

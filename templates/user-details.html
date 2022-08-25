@@ -3,64 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+        <link rel="stylesheet" type="text/css" href="/static/main.css">
+        <link rel="stylesheet" type="text/css" href="/static/list.css">
+        <link rel="stylesheet" type="text/css" href="/static/user-details.css">
 </head>
 <body>
-    <table>
-        <tr>
-            <th>User ID</th>
-            <th>Username</th>
-            <th>Registration date</th>
-            <th>Number of asked questions</th>
-            <th>Number of answers</th>
-            <th>Number of comments</th>
-            <th>Reputation</th>
-        </tr>
-        {% for data in user_data %}
-        <tr>
-            {% for k,v in data.items() %}
-                <td>{{ v }}</td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </table>
-    <p>These are all your questions:</p><br>
-    <div>
-        {% for questions in users_questions %}
-            {% for k,v in questions.items() %}
-                {% if k == 'id' %}
-                    <a href="/question/{{ v }}">go to the question</a>
-                {% else %}
-                    <p>{{ v }}</p>
-                {% endif %}
-            {% endfor %}
-        {% endfor %}
-    </div>
-    <br>
-    <p>These are all your answers:</p><br>
-    <div>
-        {% for answers in users_answers %}
-            {% for k,v in answers.items() %}
-                {% if k == 'id' %}
-                    <a href="/answer/{{ v }}/edit">go to the answer</a>
-                {% else %}
-                    <p>{{ v }}</p>
-                {% endif %}
-            {% endfor %}
-        {% endfor %}
-    </div>
-    <br>
-    <p>These are all your comments:</p><br>
-    <div>
-        {% for comments in users_comments %}
-            {% for k,v in comments.items() %}
-                {% if k == 'id' %}
-                    <a href="/comment/{{ v }}/edit">go to the comment</a>
-                {% else %}
-                    <p>{{ v }}</p>
-                {% endif %}
-            {% endfor %}
-        {% endfor %}
-    </div>
-
+    <nav class="navbar">
+        <div class="navbar-left-side">
+            <div class="home-button-container">
+                <a href="/">
+                <button button name="home-button" id="home-button"><img src="/static/resources/images/logo.png" alt="home-icon"></button>
+                </a>
+            </div>
+            <h1 class="main-title">Jamaican <span style="color: seagreen">Q</span>&<span style="color: goldenrod">A</span></h1>
+        </div>
+        <div class="navbar-right-side">
+            {% if username %}
+                <p>You are logged in as: <a class="profile-link" href="/user-list/{{ username }}"><b>{{username}}</b></a></p>
+            <a class="logout-button" href="/logout"><button class="button">Log out</button></a>
+            {% else %}
+                <a href="/login"><button class="button">Log in</button></a>
+                <a href="/registration"><button class="button">Register</button></a>
+            {% endif %}
+        </div>
+    </nav>
+    <main class="main-body">
+        <article class="profile-information-container">
+            <div class="profile-title-container">
+                <h1>Profile of <b>{{ username }}</b>:</h1>
+            </div>
+            <section class="user-table-container">
+                <table class="user-table">
+                    <tr class="user-table-title">
+                        <th class="user-table-header">User ID</th>
+                        <th class="user-table-header">Username</th>
+                        <th class="user-table-header">Registration date</th>
+                        <th class="user-table-header">Number of asked questions</th>
+                        <th class="user-table-header">Number of answers</th>
+                        <th class="user-table-header">Number of comments</th>
+                        <th class="user-table-header">Reputation</th>
+                    </tr>
+                    {% for data in user_data %}
+                    <tr>
+                        {% for k,v in data.items() %}
+                            <td>{{ v }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </table>
+            </section>
+            {% if users_questions %}
+                <div class="user-questions-title-container">
+                <h2>Your questions:</h2>
+                </div>
+                <div>
+                    {% for questions in users_questions %}
+                        <div class="user-question">
+                            {% for k,v in questions.items() %}
+                                {% if k == 'id' %}
+                                    <a href="/question/{{ v }}"><button class="button">▶ To question</button></a>
+                                {% else %}
+                                    <p>{{ v }}</p>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if users_answers %}
+                <div class="user-answer-title-container">
+                <h2>Your answers:</h2>
+                </div>
+                <div>
+                    {% for answers in users_answers %}
+                        <div class="user-question">
+                            {% for k,v in answers.items() %}
+                                {% if k == 'id' %}
+                                    <a href="/answer/{{ v }}/edit"><button class="button">▶ To answer</button></a>
+                                {% else %}
+                                    <p>{{ v }}</p>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="user-answer-comment-container">
+            <h2>Your comments:</h2>
+            </div>
+            <div>
+                {% for comments in users_comments %}
+                    <div class="user-question">
+                        {% for k,v in comments.items() %}
+                            {% if k == 'id' %}
+                                <a href="/comment/{{ v }}/edit"><button class="button">▶ To comment</button></a>
+                            {% else %}
+                                <p>{{ v }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </article>
+    </main>
 </body>
 </html>
