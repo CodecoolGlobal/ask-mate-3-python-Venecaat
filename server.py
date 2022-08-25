@@ -20,7 +20,8 @@ def main_page():
     if 'username' in session:
         username = escape(session['username'])
         return render_template("index.html", questions=latest_qs, username=username)
-    return render_template("index.html", questions=latest_qs)
+
+    return render_template("index.html", questions=latest_qs, username=False)
 
 
 @app.route("/list", methods=['GET', 'POST'])
@@ -154,6 +155,9 @@ def question_voting(question_id):
 
         elif request.form["page"] == "question":
             return redirect(f"/question/{question_id}")
+
+        elif request.form["page"] == "index":
+            return redirect("/")
 
 
 @app.route("/delete_question/<int:question_id>")

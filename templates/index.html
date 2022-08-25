@@ -70,14 +70,18 @@
                                 {% endif %}
                             {% endfor %}
                             </div>
-                            <form class="question-vote-form" action="/question_voting/{{ que.items['id'] }}" method="post">
+                            {% if username %}
+                            <form class="question-vote-form" action="/question_voting/{{que['id'] }}" method="post">
+                            {% else %}
+                            <form class="question-vote-form" action="/" method="post">
+                            {% endif %}
                                 <div class = "vote-button-container">
                                     <button name="vote" type="submit" value="vote-up" class="circle-button" id="vote-button">⇧</button>
                                 </div>
                                 <div class = "vote-button-container">
                                     <button name="vote" type="submit" value="vote-down" class="circle-button" id="vote-button">⇩</button>
                                 </div>
-                                <input type="hidden" name="page" value="question">
+                                <input type="hidden" name="page" value="index">
                             </form>
                         </div>
                         <svg class="separator-line" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8.5 15.5h-1V.5h1z" style="fill-rule:evenodd"/></svg>
@@ -127,12 +131,12 @@
             </article><br>
             {% endfor %}
         </main>
-                {% if username %}
+        {% if username %}
             <mark class="new-question-button-container">
                 <a href="/add-question">
-                    <button name="new-question" type="submit" class="circle-button"><svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" style="enable-background:new 0 0 128 128" xml:space="preserve"><path style="fill:#303030" d="M128 63.954c0 2.006-.797 3.821-2.136 5.127-1.308 1.337-3.125 2.133-5.166 2.133H71.302v49.356c0 4.012-3.284 7.292-7.302 7.292-2.009 0-3.827-.828-5.166-2.134-1.308-1.337-2.136-3.152-2.136-5.159V71.214H7.302c-4.05 0-7.302-3.248-7.302-7.26 0-2.006.797-3.853 2.136-5.159a7.279 7.279 0 0 1 5.166-2.134h49.395V7.306c0-4.012 3.284-7.26 7.302-7.26 2.009 0 3.827.828 5.166 2.133a7.238 7.238 0 0 1 2.136 5.127v49.356h49.395A7.276 7.276 0 0 1 128 63.954z"/></svg></svg></button>
+                    <button name="new-question" type="submit" class="circle-button"><svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" style="enable-background:new 0 0 128 128" xml:space="preserve"><path style="fill:#303030" d="M128 63.954c0 2.006-.797 3.821-2.136 5.127-1.308 1.337-3.125 2.133-5.166 2.133H71.302v49.356c0 4.012-3.284 7.292-7.302 7.292-2.009 0-3.827-.828-5.166-2.134-1.308-1.337-2.136-3.152-2.136-5.159V71.214H7.302c-4.05 0-7.302-3.248-7.302-7.26 0-2.006.797-3.853 2.136-5.159a7.279 7.279 0 0 1 5.166-2.134h49.395V7.306c0-4.012 3.284-7.26 7.302-7.26 2.009 0 3.827.828 5.166 2.133a7.238 7.238 0 0 1 2.136 5.127v49.356h49.395A7.276 7.276 0 0 1 128 63.954z"/></svg></button>
                 </a>
             </mark>
-            {% endif %}
+        {% endif %}
     </body>
 </html>
