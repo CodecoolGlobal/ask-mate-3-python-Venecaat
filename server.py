@@ -81,6 +81,7 @@ def add_question():
         username = session['username']
         user_id = data_manager.get_userid_by_username(username)
         data_manager.append_to_users_questions(user_id, question_id)
+        data_manager.add_stats(user_id, 'num_of_questions')
 
         return redirect(f"/question/{question_id}")
     else:
@@ -154,6 +155,7 @@ def delete_question(question_id):
         user_id_for_question = data_manager.validate_question_owner(question_id)
         if user_id_in_sess == user_id_for_question:
             data_manager.delete_question(question_id)
+            data_manager.remove_stats(user_id_in_sess, 'num_of_questions')
         else:
             flash("You can only delete your own questions!", category='error')
             return redirect(f"/question/{question_id}")
@@ -221,6 +223,7 @@ def add_answer(question_id):
         username = session['username']
         user_id = data_manager.get_userid_by_username(username)
         data_manager.append_to_users_answers(user_id, answer['id'])
+        data_manager.add_stats(user_id, 'num_of_answers')
         return redirect(f"/question/{question_id}")
 
     else:
@@ -246,6 +249,9 @@ def delete_answer(answer_id):
         user_id_for_answer = data_manager.validate_answer_owner(answer_id)
         if user_id_in_sess == user_id_for_answer:
             data_manager.delete_answer_and_comments(answer_id)
+            data_manager.remove_stats(user_id_in_sess, 'num_of_answers')
+            data_manager.get_all_comment_ids_for_answer(answer_id)
+
             return redirect(f"/question/{question_id}")
         else:
             flash("You can only delete your own answers!", category='error')
@@ -329,6 +335,7 @@ def add_comment(question_id=-1, answer_id=-1):
         username = session['username']
         user_id = data_manager.get_userid_by_username(username)
         data_manager.append_to_users_comments(user_id, comment['id'])
+        data_manager.add_stats(user_id, 'num_of_comments')
 
         return redirect(f"/question/{question_id}")
     else:
@@ -352,6 +359,7 @@ def delete_comment(comment_id):
         user_id_for_comment = data_manager.validate_comment_owner(comment_id)
         if user_id_in_sess == user_id_for_comment:
             data_manager.delete_comment(comment_id)
+            data_manager.remove_stats(user_id_in_sess, 'num_of_comments')
             return redirect(f"/question/{question_id}")
         else:
             flash("You can only delete your own comment")

@@ -2,6 +2,8 @@ import os
 import bcrypt
 import connection
 from datetime import datetime
+import psycopg2
+from psycopg2 import sql
 
 
 # QUESTION_COLUMNS = ['id', 'submission_time', "view_number", "vote_number", "title", "message", "image"]
@@ -476,7 +478,7 @@ def validate_comment_owner(cursor, comment_id):
     return cursor.fetchone()['user_id']
 
 
-# Reputation points
+# User stats
 
 @connection.connection_handler
 def question_vote_up_rep(cursor, user_id):
@@ -520,3 +522,47 @@ def answer_vote_down_rep(cursor, user_id):
         WHERE id = (%s)
         """, [user_id]
     )
+
+
+@connection.connection_handler
+def add_stats(cursor, user_id, column_name):
+    cursor.execute(
+        psycopg2.sql.SQL(
+            """
+            UPDATE users
+            SET {column_name} = {column_name} + 1
+            WHERE id = %s
+            """
+        ).format(
+            column_name=psycopg2.sql.Identifier(column_name)
+        )
+        , [user_id]
+    )
+
+
+@connection.connection_handler
+def remove_stats(cursor, user_id, column_name):
+    cursor.execute(
+        psycopg2.sql.SQL(
+            """
+            UPDATE users
+            SET {column_name} = {column_name} - 1
+            WHERE id = %s
+            """
+        ).format(
+            column_name=psycopg2.sql.Identifier(column_name)
+        )
+        , [user_id]
+    )
+
+
+@connection.connection_handler
+def get_all_comment_ids_for_answer(cursor, answer_id):
+    cursor.execute(
+        """
+        SELECT id FROM comment
+        JOIN answer ON answer.id = comment.answer_id
+        WHERE answer.id = (%s)
+        """, answer_id
+    )
+    return cursor.fetchall()
