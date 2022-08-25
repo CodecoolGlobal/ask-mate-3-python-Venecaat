@@ -1,16 +1,24 @@
 let filter_phrase = document.querySelector('#filter_text');
 let button = document.querySelector('#filter_button');
+let font_size_up = document.querySelector('#font_size_up');
+let font_size_down = document.querySelector('#font_size_down');
 button.addEventListener("click", search);
 filter_phrase.addEventListener("keyup", search);
+font_size_up.addEventListener("click", change_font_size);
+font_size_down.addEventListener("click", change_font_size);
 
-sort_order = {
+
+let sort_order = {
     "title": true,
     "description": true,
     "view_number": true,
     "vote_number": true
-}
+};
 
 search(null);
+
+let table = document.querySelector('.bonus_que');
+table.style.fontSize = "16px";
 
 function search(key) {
     if (key != null){
@@ -72,7 +80,7 @@ function sort(key) {
         }
     }
     f_questions.sort(GetSortOrder(sort_by));
-    sort_order[sort_by] = !sort_order[sort_by]
+    sort_order[sort_by] = !sort_order[sort_by];
     build_questions_html(f_questions);
 }
 
@@ -99,14 +107,26 @@ function build_questions_html(questions) {
 
     let title_sort = document.querySelector('#title');
     title_sort.addEventListener("click", sort);
-    title_sort.sort_by = "title"
+    title_sort.sort_by = "title";
     let description_sort = document.querySelector('#description');
     description_sort.addEventListener("click", sort);
-    description_sort.sort_by = "description"
+    description_sort.sort_by = "description";
     let view_number_sort = document.querySelector('#view_number');
     view_number_sort.addEventListener("click", sort);
-    view_number_sort.sort_by = "view_number"
+    view_number_sort.sort_by = "view_number";
     let vote_number_sort = document.querySelector('#vote_number');
     vote_number_sort.addEventListener("click", sort);
-    vote_number_sort.sort_by = "vote_number"
+    vote_number_sort.sort_by = "vote_number";
+}
+
+
+function change_font_size(key) {
+    let font_size_direction = key.target.id;
+    let table_font_size = +table.style.fontSize.substring(0,table.style.fontSize.length - 2);
+    if (font_size_direction === "font_size_up" && table_font_size < 25) {
+        table.style.fontSize = table_font_size + 1 + "px";
+    }
+    if (font_size_direction === "font_size_down" && table_font_size > 10) {
+        table.style.fontSize = table_font_size - 1 + "px";
+    }
 }
