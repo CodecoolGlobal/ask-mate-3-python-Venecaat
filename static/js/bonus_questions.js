@@ -3,6 +3,13 @@ let button = document.querySelector('#filter_button');
 button.addEventListener("click", search);
 filter_phrase.addEventListener("keyup", search);
 
+sort_order = {
+    "title": true,
+    "description": true,
+    "view_number": true,
+    "vote_number": true
+}
+
 search(null);
 
 function search(key) {
@@ -46,17 +53,40 @@ function search(key) {
     else {
         filtered_questions = [...bonus_questions];
     }
+    build_questions_html(filtered_questions);
 
+    return filtered_questions;
+}
+
+
+function sort(key) {
+    let sort_by = key.target.sort_by;
+    let f_questions = search();
+
+
+    function GetSortOrder(prop) {
+        return (a, b) => {
+            if (a[prop] > b[prop]) return sort_order[prop] ? 1 : -1;
+            if (a[prop] < b[prop]) return sort_order[prop] ? -1 : 1;
+            return 0;
+        }
+    }
+    f_questions.sort(GetSortOrder(sort_by));
+    sort_order[sort_by] = !sort_order[sort_by]
+    build_questions_html(f_questions);
+}
+
+function build_questions_html(questions) {
     let questions_html = "";
     let questions_container = document.querySelector('#questions_div');
     questions_html += "<table class='bonus_que'>";
     questions_html += "<tr>";
-    questions_html += "<th class='bonus_que_header'>Title</th>" +
-                      "<th class='bonus_que_header'>Description</th>" +
-                      "<th class='bonus_que_header'>View number</th>" +
-                      "<th class='bonus_que_header'>Vote number</th>";
+    questions_html += "<th class='bonus_que_header'><a href='#' id='title'>Title</a></th>" +
+                      "<th class='bonus_que_header'><a href='#' id='description'>Description</a></th>" +
+                      "<th class='bonus_que_header'><a href='#' id='view_number'>View number</a></th>" +
+                      "<th class='bonus_que_header'><a href='#' id='vote_number'>Vote number</a></th>";
     questions_html += "</tr>";
-        for (let que of filtered_questions) {
+        for (let que of questions) {
             questions_html += "<tr>";
             questions_html += "<td class='bonus_que_title'>" + que.title + "</td>" +
                               "<td class='bonus_que_desc'>" + que.description + "</td>" +
@@ -65,6 +95,18 @@ function search(key) {
             questions_html += "</tr>";
         }
     questions_html += "</table>";
-
     questions_container.innerHTML = questions_html;
+
+    let title_sort = document.querySelector('#title');
+    title_sort.addEventListener("click", sort);
+    title_sort.sort_by = "title"
+    let description_sort = document.querySelector('#description');
+    description_sort.addEventListener("click", sort);
+    description_sort.sort_by = "description"
+    let view_number_sort = document.querySelector('#view_number');
+    view_number_sort.addEventListener("click", sort);
+    view_number_sort.sort_by = "view_number"
+    let vote_number_sort = document.querySelector('#vote_number');
+    vote_number_sort.addEventListener("click", sort);
+    vote_number_sort.sort_by = "vote_number"
 }
