@@ -520,16 +520,6 @@ def bonus_questions():
     return render_template("bonus-questions.html", questions=bonus_questions_list)
 
 
-
-@app.route('/login', methods=['POST', 'GET'])
-def login():
-    return render_template('login.html')
-
-
-@app.route('/registration', methods=['POST', 'GET'])
-def register():
-    return render_template('registration.html')
-
 if __name__ == "__main__":
     app.run(
         host='0.0.0.0',
