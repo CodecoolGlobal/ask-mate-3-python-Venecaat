@@ -171,3 +171,8 @@ button:hover {
     border-color: #c5c5c5;
     background-color: #383838;
 }
+
+/*-------------------------------------EDIT ANSWERS/QUESTIONS/COMMENTS-------------------------------------*/
+.page-body{
+    padding-top: 120px;
+}

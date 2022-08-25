@@ -103,46 +103,48 @@
                     </section>
                     <div class = "footer-spacer"></div>
                     <div class="question-button-container">
-                        <form class="custom-tag-form" action="/question/{{ question_id }}/new-tag", method="post">
-                            <input class="custom-tag-input" placeholder="Custom Tag", name="custom_tag_name"></input>
-                            <button type="submit" class="circle-button" id="add-tag-submit-button"><svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" style="enable-background:new 0 0 128 128" xml:space="preserve"><path style="fill:#303030" d="M128 63.954c0 2.006-.797 3.821-2.136 5.127-1.308 1.337-3.125 2.133-5.166 2.133H71.302v49.356c0 4.012-3.284 7.292-7.302 7.292-2.009 0-3.827-.828-5.166-2.134-1.308-1.337-2.136-3.152-2.136-5.159V71.214H7.302c-4.05 0-7.302-3.248-7.302-7.26 0-2.006.797-3.853 2.136-5.159a7.279 7.279 0 0 1 5.166-2.134h49.395V7.306c0-4.012 3.284-7.26 7.302-7.26 2.009 0 3.827.828 5.166 2.133a7.238 7.238 0 0 1 2.136 5.127v49.356h49.395A7.276 7.276 0 0 1 128 63.954z"/></svg></button>
-                        </form>
-                        <div class="add-tag-container">
-                            <form class="add-tag-form" action="/question/{{ question_id }}/new-tag", method="post">
-                                <select name="tag_name" class="add-tag-select">
-                                    {% for tag in all_tags %}
-                                        <option value="{{ tag['name'] }}">{{ tag['name'] }}</option>
-                                    {% endfor %}
-                                </select>
+                        {% if username  %}
+                            <form class="custom-tag-form" action="/question/{{ question_id }}/new-tag", method="post">
+                                <input class="custom-tag-input" placeholder="Custom Tag", name="custom_tag_name"></input>
                                 <button type="submit" class="circle-button" id="add-tag-submit-button"><svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" style="enable-background:new 0 0 128 128" xml:space="preserve"><path style="fill:#303030" d="M128 63.954c0 2.006-.797 3.821-2.136 5.127-1.308 1.337-3.125 2.133-5.166 2.133H71.302v49.356c0 4.012-3.284 7.292-7.302 7.292-2.009 0-3.827-.828-5.166-2.134-1.308-1.337-2.136-3.152-2.136-5.159V71.214H7.302c-4.05 0-7.302-3.248-7.302-7.26 0-2.006.797-3.853 2.136-5.159a7.279 7.279 0 0 1 5.166-2.134h49.395V7.306c0-4.012 3.284-7.26 7.302-7.26 2.009 0 3.827.828 5.166 2.133a7.238 7.238 0 0 1 2.136 5.127v49.356h49.395A7.276 7.276 0 0 1 128 63.954z"/></svg></button>
-                            </form><br><br>
-                        </div>
-{#                        <a href="/question/{{ question_of_given_id['id'] }}/new-tag">#}
-{#                            <button class="circle-button" id="edit-button">#}
-{#                                <svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.7 5.2a1.024 1.024 0 0 1 0 1.448l-2.626 2.628-3.35-3.35L17.35 3.3a1.024 1.024 0 0 1 1.448 0zm-4.166 5.614-3.35-3.35-8.509 8.511L3 21l5.025-1.675z"/></svg>#}
-{#                            </button>#}
-{#                        </a>#}
-                        <a href="/question/{{ question_of_given_id['id'] }}/edit">
-                            <button class="circle-button" id="edit-button">
-                                <svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.7 5.2a1.024 1.024 0 0 1 0 1.448l-2.626 2.628-3.35-3.35L17.35 3.3a1.024 1.024 0 0 1 1.448 0zm-4.166 5.614-3.35-3.35-8.509 8.511L3 21l5.025-1.675z"/></svg>
-                            </button>
-                        </a>
-                        <a href="/question/{{ question_of_given_id['id'] }}/new-comment">
-                            <button class="circle-button" id="comment-button">
-                                <svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g data-name="39-Speech Bubble"><path d="M13 32a1 1 0 0 1-1-1v-5h-1A11 11 0 0 1 0 15v-4A11 11 0 0 1 11 0h10a11 11 0 0 1 11 11v4a11 11 0 0 1-11 11h-1.59l-5.71 5.71a1 1 0 0 1-.7.29zM11 2a9 9 0 0 0-9 9v4a9 9 0 0 0 9 9h2a1 1 0 0 1 1 1v3.59l4.29-4.29A1 1 0 0 1 19 24h2a9 9 0 0 0 9-9v-4a9 9 0 0 0-9-9z"/><path d="M6 12h20v2H6zM8 7h16v2H8zM8 17h16v2H8z"/></g></svg>
-                            </button>
-                        </a>
-                        <a href="/question/{{ question_of_given_id['id'] }}/new-answer">
-                            <button class="circle-button" id="answer-button">
-                                <svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g data-name="48-Speech Bubble-Answer"><path d="M21 0H11A11 11 0 0 0 0 11v4a11 11 0 0 0 11 11h1v5a1 1 0 0 0 1.71.71l5.7-5.71H21a11 11 0 0 0 11-11v-4A11 11 0 0 0 21 0zm9 15a9 9 0 0 1-9 9h-2a1 1 0 0 0-.71.29L14 28.59V25a1 1 0 0 0-1-1h-2a9 9 0 0 1-9-9v-4a9 9 0 0 1 9-9h10a9 9 0 0 1 9 9z"/><path d="M16 5a5 5 0 0 0-5 5v9h2v-4h6v4h2v-9a5 5 0 0 0-5-5zm3 8h-6v-3a3 3 0 0 1 6 0z"/></g></svg>
-                            </button>
-                        </a>
-                        <a href="/delete_question/{{ question_of_given_id['id'] }}">
-                            <button class="circle-button" id="trash-button">
-                                <svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 5a1 1 0 0 1-1 1H3a1 1 0 0 1 0-2h5V3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v1h5a1 1 0 0 1 1 1zM4.934 21.071 4 8h16l-.934 13.071a1 1 0 0 1-1 .929H5.931a1 1 0 0 1-.997-.929zM15 18a1 1 0 0 0 2 0v-6a1 1 0 0 0-2 0zm-4 0a1 1 0 0 0 2 0v-6a1 1 0 0 0-2 0zm-4 0a1 1 0 0 0 2 0v-6a1 1 0 0 0-2 0z"/></svg>
-                            </button>
-                        </a>
-                        <a href="/list"><button class="button">◀ Back</button></a>
+                            </form>
+                            <div class="add-tag-container">
+                                <form class="add-tag-form" action="/question/{{ question_id }}/new-tag", method="post">
+                                    <select name="tag_name" class="add-tag-select">
+                                        {% for tag in all_tags %}
+                                            <option value="{{ tag['name'] }}">{{ tag['name'] }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <button type="submit" class="circle-button" id="add-tag-submit-button"><svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" style="enable-background:new 0 0 128 128" xml:space="preserve"><path style="fill:#303030" d="M128 63.954c0 2.006-.797 3.821-2.136 5.127-1.308 1.337-3.125 2.133-5.166 2.133H71.302v49.356c0 4.012-3.284 7.292-7.302 7.292-2.009 0-3.827-.828-5.166-2.134-1.308-1.337-2.136-3.152-2.136-5.159V71.214H7.302c-4.05 0-7.302-3.248-7.302-7.26 0-2.006.797-3.853 2.136-5.159a7.279 7.279 0 0 1 5.166-2.134h49.395V7.306c0-4.012 3.284-7.26 7.302-7.26 2.009 0 3.827.828 5.166 2.133a7.238 7.238 0 0 1 2.136 5.127v49.356h49.395A7.276 7.276 0 0 1 128 63.954z"/></svg></button>
+                                </form><br><br>
+                            </div>
+    {#                        <a href="/question/{{ question_of_given_id['id'] }}/new-tag">#}
+    {#                            <button class="circle-button" id="edit-button">#}
+    {#                                <svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.7 5.2a1.024 1.024 0 0 1 0 1.448l-2.626 2.628-3.35-3.35L17.35 3.3a1.024 1.024 0 0 1 1.448 0zm-4.166 5.614-3.35-3.35-8.509 8.511L3 21l5.025-1.675z"/></svg>#}
+    {#                            </button>#}
+    {#                        </a>#}
+                            <a href="/question/{{ question_of_given_id['id'] }}/edit">
+                                <button class="circle-button" id="edit-button">
+                                    <svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.7 5.2a1.024 1.024 0 0 1 0 1.448l-2.626 2.628-3.35-3.35L17.35 3.3a1.024 1.024 0 0 1 1.448 0zm-4.166 5.614-3.35-3.35-8.509 8.511L3 21l5.025-1.675z"/></svg>
+                                </button>
+                            </a>
+                            <a href="/question/{{ question_of_given_id['id'] }}/new-comment">
+                                <button class="circle-button" id="comment-button">
+                                    <svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g data-name="39-Speech Bubble"><path d="M13 32a1 1 0 0 1-1-1v-5h-1A11 11 0 0 1 0 15v-4A11 11 0 0 1 11 0h10a11 11 0 0 1 11 11v4a11 11 0 0 1-11 11h-1.59l-5.71 5.71a1 1 0 0 1-.7.29zM11 2a9 9 0 0 0-9 9v4a9 9 0 0 0 9 9h2a1 1 0 0 1 1 1v3.59l4.29-4.29A1 1 0 0 1 19 24h2a9 9 0 0 0 9-9v-4a9 9 0 0 0-9-9z"/><path d="M6 12h20v2H6zM8 7h16v2H8zM8 17h16v2H8z"/></g></svg>
+                                </button>
+                            </a>
+                            <a href="/question/{{ question_of_given_id['id'] }}/new-answer">
+                                <button class="circle-button" id="answer-button">
+                                    <svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g data-name="48-Speech Bubble-Answer"><path d="M21 0H11A11 11 0 0 0 0 11v4a11 11 0 0 0 11 11h1v5a1 1 0 0 0 1.71.71l5.7-5.71H21a11 11 0 0 0 11-11v-4A11 11 0 0 0 21 0zm9 15a9 9 0 0 1-9 9h-2a1 1 0 0 0-.71.29L14 28.59V25a1 1 0 0 0-1-1h-2a9 9 0 0 1-9-9v-4a9 9 0 0 1 9-9h10a9 9 0 0 1 9 9z"/><path d="M16 5a5 5 0 0 0-5 5v9h2v-4h6v4h2v-9a5 5 0 0 0-5-5zm3 8h-6v-3a3 3 0 0 1 6 0z"/></g></svg>
+                                </button>
+                            </a>
+                            <a href="/delete_question/{{ question_of_given_id['id'] }}">
+                                <button class="circle-button" id="trash-button">
+                                    <svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 5a1 1 0 0 1-1 1H3a1 1 0 0 1 0-2h5V3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v1h5a1 1 0 0 1 1 1zM4.934 21.071 4 8h16l-.934 13.071a1 1 0 0 1-1 .929H5.931a1 1 0 0 1-.997-.929zM15 18a1 1 0 0 0 2 0v-6a1 1 0 0 0-2 0zm-4 0a1 1 0 0 0 2 0v-6a1 1 0 0 0-2 0zm-4 0a1 1 0 0 0 2 0v-6a1 1 0 0 0-2 0z"/></svg>
+                                </button>
+                            </a>
+                            <a href="/list"><button class="button">◀ Back</button></a>
+                        {% endif %}
                     </div>
                 </footer>
             </article>
@@ -172,6 +174,7 @@
                                 {{v}}
                             </div>
                             <div class="comment-navigation-buttons">
+                                {% if username  %}
                                 <a href="/comment/{{ comment['id'] }}/edit">
                                     <button class="circle-button" id="edit-button">
                                         <svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.7 5.2a1.024 1.024 0 0 1 0 1.448l-2.626 2.628-3.35-3.35L17.35 3.3a1.024 1.024 0 0 1 1.448 0zm-4.166 5.614-3.35-3.35-8.509 8.511L3 21l5.025-1.675z"/></svg>
@@ -182,17 +185,19 @@
                                         <svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 5a1 1 0 0 1-1 1H3a1 1 0 0 1 0-2h5V3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v1h5a1 1 0 0 1 1 1zM4.934 21.071 4 8h16l-.934 13.071a1 1 0 0 1-1 .929H5.931a1 1 0 0 1-.997-.929zM15 18a1 1 0 0 0 2 0v-6a1 1 0 0 0-2 0zm-4 0a1 1 0 0 0 2 0v-6a1 1 0 0 0-2 0zm-4 0a1 1 0 0 0 2 0v-6a1 1 0 0 0-2 0z"/></svg>
                                     </button>
                                 </a>
+                                {% endif %}
                             </div>
                             <!-- asd -->
                             <div class="comment-vote-container">
-                                <div class="comment-vote-count">
-                                {% for k,v in comment.items() %}
-                                    {% if k == "vote_number" %}
-                                        {{ v }}
-                                    {% endif %}
-                                {% endfor %}
-                                </div>
-
+                                {% if username  %}
+                                    <div class="comment-vote-count">
+                                    {% for k,v in comment.items() %}
+                                        {% if k == "vote_number" %}
+                                            {{ v }}
+                                        {% endif %}
+                                    {% endfor %}
+                                    </div>
+                                {% endif %}
                             </div>
                             <!-- asd -->
                         </article>
@@ -234,6 +239,10 @@
                             {{v}}
                             </div>
                             <div class="answer-navigation-buttons">
+                                {% if username  %}
+                                    <button type="submit" class="circle-button" id="check-button">
+                                        <svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M9.993 19.421 3.286 12.58l1.428-1.401 5.293 5.4 9.286-9.286 1.414 1.414L9.993 19.421z"/></svg>
+                                    </button>
                                 <a href="/answer/{{ ans['id'] }}/edit">
                                     <button class="circle-button" id="edit-button">
                                         <svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.7 5.2a1.024 1.024 0 0 1 0 1.448l-2.626 2.628-3.35-3.35L17.35 3.3a1.024 1.024 0 0 1 1.448 0zm-4.166 5.614-3.35-3.35-8.509 8.511L3 21l5.025-1.675z"/></svg>
@@ -249,9 +258,11 @@
                                         <svg width="24px" style="filter: invert(76%) sepia(8%) saturate(0%) hue-rotate(123deg) brightness(105%) contrast(88%);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 5a1 1 0 0 1-1 1H3a1 1 0 0 1 0-2h5V3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v1h5a1 1 0 0 1 1 1zM4.934 21.071 4 8h16l-.934 13.071a1 1 0 0 1-1 .929H5.931a1 1 0 0 1-.997-.929zM15 18a1 1 0 0 0 2 0v-6a1 1 0 0 0-2 0zm-4 0a1 1 0 0 0 2 0v-6a1 1 0 0 0-2 0zm-4 0a1 1 0 0 0 2 0v-6a1 1 0 0 0-2 0z"/></svg>
                                     </button>
                                 </a>
+                                {% endif %}
                             </div>
                             <!-- asd -->
                             <div class="answer-vote-container">
+                                {% if username  %}
                                 <div class="answer-vote-count">
                                 {% for k,v in ans.items() %}
                                     {% if k == "vote_number" %}
@@ -266,6 +277,7 @@
                                         <input type="hidden" name="page" value="question">
                                     </form>
                                 </div>
+                                {% endif %}
                             </div>
                         </article>
 {#            COMMENTS variable: comments_for_answers--------------------------------------------------------------------------------------------#}

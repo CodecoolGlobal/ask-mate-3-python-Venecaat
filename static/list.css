@@ -81,6 +81,7 @@
     font-size: 1.5em;
     margin-top: 0.5%;
     margin-bottom: 0.5%;
+    text-align: left;
 }
 .date-container{
     display: flex;
@@ -222,6 +223,7 @@
     align-items: flex-start;
     width: 100%;
     max-height: 120px;
+    min-height: 40px;
 }
 .tags-container{
     max-width: 300px;
