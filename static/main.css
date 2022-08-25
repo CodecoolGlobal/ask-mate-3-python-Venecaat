@@ -107,7 +107,13 @@ select {
     border: none !important;
     background-color: #262626;
 }
-
+.profile-link {
+    color: #c5c5c5;
+    text-decoration: none;
+}
+.profile-link:hover {
+    text-decoration: underline;
+}
 
 /*-------------------------------------BUTTONS-------------------------------------*/
 button{

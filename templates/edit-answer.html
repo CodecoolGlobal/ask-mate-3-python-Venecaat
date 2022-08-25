@@ -18,7 +18,7 @@
                 </div>
                 <div class="navbar-right-side">
                     {% if username %}
-                        <p>You are logged in as: <b>{{username}}</b></p>
+                        <p>You are logged in as: <a class="profile-link" href="/user-list/{{ username }}"><b>{{username}}</b></a></p>
                     <a class="logout-button" href="/logout"><button class="button">Log out</button></a>
                     {% else %}
                         <a href="/login"><button class="button">Log in</button></a>

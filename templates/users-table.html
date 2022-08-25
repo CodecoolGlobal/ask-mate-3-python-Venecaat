@@ -3,30 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <title>All users' data</title>
+        <link rel="stylesheet" type="text/css" href="/static/main.css">
+        <link rel="stylesheet" type="text/css" href="/static/list.css">
+        <link rel="stylesheet" type="text/css" href="/static/all-users.css">
 </head>
 <body>
-    <table>
-        <tr>
-            <th>User ID</th>
-            <th>Username</th>
-            <th>Registration date</th>
-            <th>Number of asked questions</th>
-            <th>Number of answers</th>
-            <th>Number of comments</th>
-            <th>Reputation</th>
-        </tr>
-        {% for data in all_user_data %}
-        <tr>
-            {% for k,v in data.items() %}
-                {% if k == 'username' %}
-                    <td><a href="/user-list/{{ v }}">{{ v }}</a></td>
-                {% else %}
-                    <td>{{ v }}</td>
-                {% endif %}
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </table>
-
+    <nav class="navbar">
+        <div class="navbar-left-side">
+            <div class="home-button-container">
+                <a href="/">
+                <button button name="home-button" id="home-button"><img src="/static/resources/images/logo.png" alt="home-icon"></button>
+                </a>
+            </div>
+            <h1 class="main-title">Jamaican <span style="color: seagreen">Q</span>&<span style="color: goldenrod">A</span></h1>
+        </div>
+        <div class="navbar-right-side">
+            {% if username %}
+                <p>You are logged in as: <a class="profile-link" href="/user-list/{{ username }}"><b>{{username}}</b></a></p>
+            <a class="logout-button" href="/logout"><button class="button">Log out</button></a>
+            {% else %}
+                <a href="/login"><button class="button">Log in</button></a>
+                <a href="/registration"><button class="button">Register</button></a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="main-body">
+        <h1>List of all users</h1>
+        <section class="user-table-container">
+            <table class="user-table">
+                <tr class="user-table-title">
+                    <th class="user-table-header">User ID</th>
+                    <th class="user-table-header">Username</th>
+                    <th class="user-table-header">Registration date</th>
+                    <th class="user-table-header">Number of asked questions</th>
+                    <th class="user-table-header">Number of answers</th>
+                    <th class="user-table-header">Number of comments</th>
+                    <th class="user-table-header">Reputation</th>
+                </tr>
+                {% for data in all_user_data %}
+                <tr>
+                    {% for k,v in data.items() %}
+                        {% if k == 'username' %}
+                            <td><a href="/user-list/{{ v }}">{{ v }}</a></td>
+                        {% else %}
+                            <td>{{ v }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+    </main>
 </body>
 </html>

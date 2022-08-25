@@ -17,11 +17,11 @@ def allowed_file(filename):
 @app.route("/", methods=['GET', 'POST'])
 def main_page():
     latest_qs = data_manager.get_latest_questions()
+    tags = data_manager.question_tag_count()
     if 'username' in session:
         username = escape(session['username'])
-        return render_template("index.html", questions=latest_qs, username=username)
-
-    return render_template("index.html", questions=latest_qs, username=False)
+        return render_template("index.html", questions=latest_qs, username=username, tags=tags)
+    return render_template("index.html", questions=latest_qs, tags=tags, username=False)
 
 
 @app.route("/list", methods=['GET', 'POST'])
@@ -548,6 +548,9 @@ def bonus_questions():
 @app.route('/user-list', methods=['GET', 'POST'])
 def users_table():
     all_user_data = data_manager.get_all_user_data_for_list()
+    if 'username' in session:
+        username = escape(session['username'])
+        return render_template("users-table.html", username=username, all_user_data=all_user_data)
     return render_template('users-table.html', all_user_data=all_user_data)
 
 
@@ -559,14 +562,13 @@ def user_details(username):
     users_questions = data_manager.get_questions_of_user(user_id)
     users_answers = data_manager.get_answers_of_user(user_id)
     users_comments = data_manager.get_comments_of_user(user_id)
+    if 'username' in session:
+        username = escape(session['username'])
+        return render_template('user-details.html', user_data=user_data, users_questions=users_questions,
+                               users_answers=users_answers, users_comments=users_comments, username=username)
     return render_template('user-details.html', user_data=user_data, users_questions=users_questions,
                            users_answers=users_answers, users_comments=users_comments)
 
-
-@app.route('/tags', methods=['GET'])
-def tag_count():
-    tags = data_manager.question_tag_count()
-    return render_template('tags.html', tags=tags)
 
 
 if __name__ == "__main__":
