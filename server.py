@@ -479,9 +479,8 @@ def register():
             flash("A user with this username already exists!", category="error")
         else:
             text_password = request.form['password']
-            reg_date = data_manager.get_time()
             hashed_password = data_manager.hash_password(text_password)
-            data_manager.add_user(username, hashed_password, reg_date)
+            data_manager.add_user(username, hashed_password)
             return redirect('/')
     return render_template('registration.html')
 

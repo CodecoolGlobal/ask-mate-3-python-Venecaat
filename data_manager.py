@@ -142,18 +142,11 @@ def get_next_comment_id(cursor):
 def delete_question(cursor, question_id):
     cursor.execute(f"SELECT image FROM answer WHERE question_id = {question_id}")
     answer_images = cursor.fetchall()
-    cursor.execute(f"""
-    DELETE FROM comment WHERE answer_id IN
-    (SELECT answer.id FROM answer JOIN question ON answer.question_id = question.id
-     WHERE answer.question_id = {question_id})
-    """)
-    cursor.execute(f"DELETE FROM comment WHERE question_id = {question_id}")
-    cursor.execute(f"DELETE FROM question_tag WHERE question_id = {question_id}")
-    cursor.execute(f"DELETE FROM answer WHERE question_id = {question_id}")
     cursor.execute(f"DELETE FROM question WHERE id = {question_id}")
 
     for d in answer_images:
-        os.remove(d['image'])
+        if d['image']:
+            os.remove(d['image'])
 
 
 @connection.connection_handler
@@ -392,13 +385,13 @@ def get_hashed_password_by_username(self, username):
 
 
 @connection.connection_handler
-def add_user(cursor, username, hashed_password, reg_date):
+def add_user(cursor, username, hashed_password):
     cursor.execute(
         """
-        INSERT INTO users (username, password, registration_date)
-        VALUES (%s, %s, %s)
+        INSERT INTO users (username, password)
+        VALUES (%s, %s)
         """,
-        (username, hashed_password, reg_date)
+        (username, hashed_password)
     )
 
 
