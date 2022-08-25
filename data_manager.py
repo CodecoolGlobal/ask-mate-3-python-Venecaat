@@ -152,8 +152,8 @@ def delete_question(cursor, question_id):
     cursor.execute(f"DELETE FROM answer WHERE question_id = {question_id}")
     cursor.execute(f"DELETE FROM question WHERE id = {question_id}")
 
-    for d in answer_images:
-        os.remove(['image'])
+    # for d in answer_images:
+        # os.remove(['image'])
 
 
 @connection.connection_handler
@@ -560,9 +560,48 @@ def remove_stats(cursor, user_id, column_name):
 def get_all_comment_ids_for_answer(cursor, answer_id):
     cursor.execute(
         """
-        SELECT id FROM comment
+        SELECT comment.id FROM comment
         JOIN answer ON answer.id = comment.answer_id
-        WHERE answer.id = (%s)
-        """, answer_id
+        WHERE comment.answer_id = (%s)
+        GROUP BY answer.id, comment.id
+        """, [answer_id]
     )
-    return cursor.fetchall()
+    real_dict = cursor.fetchall()
+    comment_ids = []
+    for c_id in real_dict:
+        comment_ids.append(c_id['id'])
+    return comment_ids
+
+
+@connection.connection_handler
+def get_all_answer_ids_for_question(cursor, question_id):
+    cursor.execute(
+        """
+        SELECT answer.id FROM answer
+        JOIN question ON question.id = answer.question_id
+        WHERE answer.question_id = (%s)
+        GROUP BY question.id, answer.id
+        """, [question_id]
+    )
+    real_dict = cursor.fetchall()
+    answer_ids = []
+    for a_id in real_dict:
+        answer_ids.append(a_id['id'])
+    return answer_ids
+
+
+@connection.connection_handler
+def get_all_comment_ids_for_question(cursor, question_id):
+    cursor.execute(
+        """
+        SELECT comment.id FROM comment
+        JOIN question ON question.id = comment.question_id
+        WHERE comment.question_id = (%s)
+        GROUP BY question.id, comment.id
+        """, [question_id]
+    )
+    real_dict = cursor.fetchall()
+    comment_ids = []
+    for c_id in real_dict:
+        comment_ids.append(c_id['id'])
+    return comment_ids

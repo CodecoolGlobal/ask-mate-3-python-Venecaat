@@ -154,8 +154,23 @@ def delete_question(question_id):
         user_id_in_sess = data_manager.get_userid_by_username(username)
         user_id_for_question = data_manager.validate_question_owner(question_id)
         if user_id_in_sess == user_id_for_question:
+            # user stats for answer delete
+            answer_ids_for_question = data_manager.get_all_answer_ids_for_question(question_id)
+            user_ids_for_answers = []
+            for a_id in answer_ids_for_question:
+                user_ids_for_answers.append(data_manager.validate_answer_owner(a_id))
+                comment_ids = data_manager.get_all_comment_ids_for_answer(a_id) + data_manager.get_all_comment_ids_for_question(question_id)
+                # comment_ids += data_manager.get_all_comment_ids_for_question(question_id)
+                user_ids_for_comments = []
+                for c_id in comment_ids:
+                    user_ids_for_comments.append(data_manager.validate_comment_owner(c_id))
+                for u_id in user_ids_for_comments:
+                    data_manager.remove_stats(u_id, 'num_of_comments')
             data_manager.delete_question(question_id)
             data_manager.remove_stats(user_id_in_sess, 'num_of_questions')
+            for u_id in user_ids_for_answers:
+                data_manager.remove_stats(u_id, 'num_of_answers')
+
         else:
             flash("You can only delete your own questions!", category='error')
             return redirect(f"/question/{question_id}")
@@ -248,9 +263,17 @@ def delete_answer(answer_id):
         user_id_in_sess = data_manager.get_userid_by_username(username)
         user_id_for_answer = data_manager.validate_answer_owner(answer_id)
         if user_id_in_sess == user_id_for_answer:
+            # user stats
+            comment_ids = data_manager.get_all_comment_ids_for_answer(answer_id)
+            user_ids_for_comments = []
+            for c_id in comment_ids:
+                user_ids_for_comments.append(data_manager.validate_comment_owner(c_id))
             data_manager.delete_answer_and_comments(answer_id)
             data_manager.remove_stats(user_id_in_sess, 'num_of_answers')
-            data_manager.get_all_comment_ids_for_answer(answer_id)
+            for u_id in user_ids_for_comments:
+                data_manager.remove_stats(u_id, 'num_of_comments')
+
+
 
             return redirect(f"/question/{question_id}")
         else:
@@ -287,7 +310,6 @@ def edit_answer(answer_id):
             flash("You have to log in to edit your answer")
             ans_question_id = data_manager.get_answer_question_id(answer_id)
             return redirect(f"/question/{ans_question_id}")
-
 
 
 
