@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Jamaican Q&A</title>
+        <link rel="stylesheet" type="text/css" href="/static/main.css">
+        <link rel="stylesheet" type="text/css" href="/static/list.css">
+        <style>
+            .bonus_que {
+                margin: auto;
+                border-collapse: collapse;
+                width: 92%;
+            }
+            .bonus_que_value {
+                border: 2px solid goldenrod;
+                padding: 10px;
+            }
+            .bonus_que_header {
+                padding: 0px 10px 10px 10px;
+            }
+        </style>
+    </head>
+    <body class="html-body">
+        <main class="list-main-div">
+            <nav class="navbar">
+                <div class="home-button-container">
+                    <a href="/">
+                    <button name="home-button" id="home-button"><img src="/static/resources/images/logo.png" alt="home-icon"></button>
+                    </a>
+                </div>
+                <h1 class="main-title">Jamaican <span style="color: seagreen">Q</span>&<span style="color: goldenrod">A</span></h1>
+            </nav>
+            <section class="page-body">
+            <div class="search-bar-container">
+                <input id="filter_text" placeholder="Filter in questions" name="filter" class="search-input">
+                <button id="filter_button" class="search-button">Filter</button>
+            </div>
+            <br>
+            <div id="questions_div">
+                <script>
+                    let bonus_questions = JSON.parse('{{ questions | tojson}}');
+                </script>
+                <script type="text/javascript" src="static/js/bonus_questions.js"></script>
+            </div>
+        </main>
+    </body>
+</html>

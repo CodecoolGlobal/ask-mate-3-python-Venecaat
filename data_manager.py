@@ -1,6 +1,6 @@
 import os
 
-import connection
+import connection, bonus_questions
 from datetime import datetime
 
 
@@ -140,18 +140,18 @@ def get_next_comment_id(cursor):
 def delete_question(cursor, question_id):
     cursor.execute(f"SELECT image FROM answer WHERE question_id = {question_id}")
     answer_images = cursor.fetchall()
-    cursor.execute(f"""
-    DELETE FROM comment WHERE answer_id IN
-    (SELECT answer.id FROM answer JOIN question ON answer.question_id = question.id
-     WHERE answer.question_id = {question_id})
-    """)
-    cursor.execute(f"DELETE FROM comment WHERE question_id = {question_id}")
-    cursor.execute(f"DELETE FROM question_tag WHERE question_id = {question_id}")
-    cursor.execute(f"DELETE FROM answer WHERE question_id = {question_id}")
+    # cursor.execute(f"""
+    # DELETE FROM comment WHERE answer_id IN
+    # (SELECT answer.id FROM answer JOIN question ON answer.question_id = question.id
+    #  WHERE answer.question_id = {question_id})
+    # """)
+    # cursor.execute(f"DELETE FROM comment WHERE question_id = {question_id}")
+    # cursor.execute(f"DELETE FROM question_tag WHERE question_id = {question_id}")
+    # cursor.execute(f"DELETE FROM answer WHERE question_id = {question_id}")
     cursor.execute(f"DELETE FROM question WHERE id = {question_id}")
 
     for d in answer_images:
-        os.remove(['image'])
+        os.remove(d['image'])
 
 
 @connection.connection_handler
@@ -341,3 +341,33 @@ def get_tags_for_question(cursor, question_id):
         WHERE question_tag.question_id = {question_id};
         """)
     return cursor.fetchall()
+
+
+def get_bonus_questions():
+    bonus_questions_list = bonus_questions.SAMPLE_QUESTIONS
+    return bonus_questions_list
+
+
+# def filter_bonus_questions(filter_phrase=""):
+#     bonus_questions_list = bonus_questions.SAMPLE_QUESTIONS
+#     if filter_phrase:
+#         bonus_questions_filtered_list = []
+#         for que in bonus_questions_list:
+#             if filter_phrase[0] == "!":
+#                 try:
+#                     if filter_phrase[1:filter_phrase.index(":")].lower() == "description":
+#                         if filter_phrase[filter_phrase.index(":") + 1:] not in que["description"]:
+#                             bonus_questions_filtered_list.append(que)
+#                 except ValueError:
+#                     if filter_phrase[1:] not in que["title"]:
+#                         bonus_questions_filtered_list.append(que)
+#             else:
+#                 try:
+#                     if filter_phrase[:filter_phrase.index(":")].lower() == "description":
+#                         if filter_phrase[filter_phrase.index(":") + 1:] in que["description"]:
+#                             bonus_questions_filtered_list.append(que)
+#                 except ValueError:
+#                     if filter_phrase in que["title"]:
+#                         bonus_questions_filtered_list.append(que)
+#         return bonus_questions_filtered_list
+#     return bonus_questions_list
