@@ -386,7 +386,7 @@ def get_one_user_data(cursor, user_id):
         WHERE id = (%s)
         """, [user_id]
     )
-    return cursor.fetchall()
+    return cursor.fetchone()
 
 
 @connection.connection_handler

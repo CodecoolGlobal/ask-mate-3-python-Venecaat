@@ -117,6 +117,14 @@ def display_question(question_id):
     comments_for_question = data_manager.get_comments_for_question_db(question_id)
     comments_for_answers = data_manager.get_comments_for_answers_db(answers)
 
+    authorID_of_question = data_manager.validate_question_owner(question_id=question_id)
+    author_of_question = data_manager.get_one_user_data(user_id=authorID_of_question)["username"]
+    if 'username' in session:
+        if session["username"] == author_of_question:
+            que_aut_same_as_log_user = True
+        else:
+            que_aut_same_as_log_user = False
+
     """ SYNTAX FOR COMMENTS_FOR_ANSWERS - NEED 3 FOR LOOP
     all comment list []
        comments for an answer list []
@@ -127,7 +135,8 @@ def display_question(question_id):
         username = escape(session['username'])
         return render_template('question.html', question_of_given_id=question_of_given_id, answers_to_question=answers,
                                comments_for_question=comments_for_question, comments_for_answers=comments_for_answers,
-                               question_id=question_id, tags_for_question=tags_for_question, all_tags=all_tags, username=username)
+                               question_id=question_id, tags_for_question=tags_for_question, all_tags=all_tags, username=username,
+                               que_aut_same_as_log_user=que_aut_same_as_log_user)
 
     return render_template('question.html', question_of_given_id=question_of_given_id, answers_to_question=answers,
                            comments_for_question=comments_for_question, comments_for_answers=comments_for_answers,
