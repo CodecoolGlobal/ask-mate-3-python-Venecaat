@@ -42,6 +42,9 @@ def list_questions():
     else:
         questions = data_manager.sort_questions(submission=True, desc=True)
 
+    if 'username' in session:
+        username = escape(session['username'])
+        return render_template("list.html", username=username, questions=questions)
     # questions_tags = []
     # for que in questions:
     #     questions_tags.append(data_manager.get_tags_for_question(question_id=que['id']))
@@ -52,6 +55,7 @@ def list_questions():
 @app.route("/add-question", methods=['GET', 'POST'])
 def add_question():
     question = {}
+
 
     if request.method == "POST":
         question["id"] = data_manager.get_next_question_id()
@@ -87,7 +91,7 @@ def add_question():
         return redirect(f"/question/{question_id}")
     else:
         if "username" in session:
-            return render_template("add-question.html")
+            return render_template("add-question.html", username = session['username'])
         else:
             flash("You have to login to ask questions!", category='error')
             return redirect('/')
@@ -115,6 +119,12 @@ def display_question(question_id):
        comments for an answer list []
           comment elements dictionary {}
     """
+
+    if 'username' in session:
+        username = escape(session['username'])
+        return render_template('question.html', question_of_given_id=question_of_given_id, answers_to_question=answers,
+                               comments_for_question=comments_for_question, comments_for_answers=comments_for_answers,
+                               question_id=question_id, tags_for_question=tags_for_question, all_tags=all_tags, username=username)
 
     return render_template('question.html', question_of_given_id=question_of_given_id, answers_to_question=answers,
                            comments_for_question=comments_for_question, comments_for_answers=comments_for_answers,
@@ -244,7 +254,7 @@ def add_answer(question_id):
 
     else:
         if "username" in session:
-            return render_template("add-answer.html", question_id=question_id)
+            return render_template("add-answer.html", question_id=question_id, username=session['username'])
         else:
             flash("You have to login to answer a question!", category='error')
             return redirect(f"/question/{question_id}")
@@ -364,9 +374,9 @@ def add_comment(question_id=-1, answer_id=-1):
     else:
         if "username" in session:
             if question_id >= 0:
-                return render_template("add-comment.html", question_id=str(question_id))
+                return render_template("add-comment.html", question_id=str(question_id), username=session['username'])
             else:
-                return render_template("add-comment.html", answer_id=str(answer_id))
+                return render_template("add-comment.html", answer_id=str(answer_id), username=session['username'])
         else:
             flash("You have to login to comment!", category='error')
             return redirect(f"/question/{question_id}")
@@ -516,6 +526,9 @@ def logout():
 @app.route('/bonus-questions')
 def bonus_questions():
     bonus_questions_list = data_manager.get_bonus_questions()
+    if 'username' in session:
+        username = escape(session['username'])
+        return render_template("bonus-questions.html", username=username, questions=bonus_questions_list)
 
     return render_template("bonus-questions.html", questions=bonus_questions_list)
 

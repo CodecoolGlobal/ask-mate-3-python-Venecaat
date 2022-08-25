@@ -9,15 +9,26 @@
 </head>
 <body>
     <main class="list-main-div">
-        <nav class="navbar">
-            <div class="home-button-container">
-                <a href="/">
-                <button name="home-button" id="home-button"><img src="/static/resources/images/logo.png" alt="home-icon"></button>
-                </a>
-            </div>
-            <h1 class="main-title">Jamaican <span style="color: seagreen">Q</span>&<span style="color: goldenrod">A</span></h1>
-        </nav>
-        <form action="/login", method="post" class="login-form">
+            <nav class="navbar">
+                <div class="navbar-left-side">
+                    <div class="home-button-container">
+                        <a href="/">
+                        <button button name="home-button" id="home-button"><img src="/static/resources/images/logo.png" alt="home-icon"></button>
+                        </a>
+                    </div>
+                    <h1 class="main-title">Jamaican <span style="color: seagreen">Q</span>&<span style="color: goldenrod">A</span></h1>
+                </div>
+                <div class="navbar-right-side">
+                    {% if username %}
+                        <p>You are logged in as: <b>{{username}}</b></p>
+                    <a class="logout-button" href="/logout"><button class="button">Log out</button></a>
+                    {% else %}
+                        <a href="/login"><button class="button">Log in</button></a>
+                        <a href="/registration"><button class="button">Register</button></a>
+                    {% endif %}
+                </div>
+            </nav>
+        <form action="/registration", method="post" class="login-form">
             <h1>Create an account</h1>
             <div class="register-input-container">
                 <input class="register-input" type="text" name="username" placeholder="E-mail">

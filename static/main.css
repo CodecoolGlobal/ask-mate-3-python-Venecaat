@@ -75,19 +75,34 @@ select {
     -webkit-appearance: none;
     -moz-appearance: none;
 }
-
 .navbar{
+    z-index: 9999;
+    position: fixed;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     background-color: #262626;
     width: 100%;
 }
-.navbar>.home-button-container>a>button>img{
+.navbar-left-side{
+    display: flex;
+    align-items: center;
+}
+.navbar>.navbar-left-side>.home-button-container>a>button>img{
     width: 48px;
     height: 48px;
     cursor: pointer;
 }
-
+.logout-button{
+    margin-left: 20px;
+}
+.navbar-right-side{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 20px;
+}
 #home-button{
     border: none !important;
     background-color: #262626;
