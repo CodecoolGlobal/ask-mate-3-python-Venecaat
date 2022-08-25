@@ -600,7 +600,6 @@ def get_all_comment_ids_for_question(cursor, question_id):
     return comment_ids
 
 
-
 def get_bonus_questions():
     bonus_questions_list = bonus_questions.SAMPLE_QUESTIONS
     return bonus_questions_list
