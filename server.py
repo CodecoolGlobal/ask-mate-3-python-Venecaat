@@ -469,7 +469,6 @@ def delete_tag(question_id, tag_id):
         return redirect(f'/question/{question_id}')
 
 
-
 @app.route('/registration', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
@@ -479,9 +478,8 @@ def register():
             flash("A user with this username already exists!", category="error")
         else:
             text_password = request.form['password']
-            reg_date = data_manager.get_time()
             hashed_password = data_manager.hash_password(text_password)
-            data_manager.add_user(username, hashed_password, reg_date)
+            data_manager.add_user(username, hashed_password)
             return redirect('/')
     return render_template('registration.html')
 
@@ -518,6 +516,23 @@ def bonus_questions():
     bonus_questions_list = data_manager.get_bonus_questions()
 
     return render_template("bonus-questions.html", questions=bonus_questions_list)
+
+
+@app.route('/user-list', methods=['GET', 'POST'])
+def users_table():
+    all_user_data = data_manager.get_all_user_data_for_list()
+    return render_template('users-table.html', all_user_data=all_user_data)
+
+
+@app.route('/user-list/<username>', methods=['GET'])
+def user_details(username):
+    user_id = data_manager.get_userid_by_username(username)
+    user_data = data_manager.get_one_user_data(user_id)
+    users_questions = data_manager.get_questions_of_user(user_id)
+    users_answers = data_manager.get_answers_of_user(user_id)
+    users_comments = data_manager.get_comments_of_user(user_id)
+    return render_template('user-details.html', user_data=user_data, users_questions=users_questions,
+                           users_answers=users_answers, users_comments=users_comments)
 
 
 if __name__ == "__main__":

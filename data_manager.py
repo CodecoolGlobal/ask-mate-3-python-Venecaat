@@ -368,6 +368,29 @@ def get_all_user_data(cursor):
 
 
 @connection.connection_handler
+def get_all_user_data_for_list(cursor):
+    cursor.execute(
+        """
+        SELECT id, username, registration_date, num_of_questions, num_of_answers, num_of_comments, reputation
+        FROM users
+        """
+    )
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def get_one_user_data(cursor, user_id):
+    cursor.execute(
+        """
+        SELECT id, username, registration_date, num_of_questions, num_of_answers, num_of_comments, reputation
+        FROM users
+        WHERE id = (%s)
+        """, [user_id]
+    )
+    return cursor.fetchall()
+
+
+@connection.connection_handler
 def check_if_user_exists(self, username):
     exists = False
     all_user_data = get_all_user_data()
@@ -392,13 +415,13 @@ def get_hashed_password_by_username(self, username):
 
 
 @connection.connection_handler
-def add_user(cursor, username, hashed_password, reg_date):
+def add_user(cursor, username, hashed_password):
     cursor.execute(
         """
-        INSERT INTO users (username, password, registration_date)
-        VALUES (%s, %s, %s)
+        INSERT INTO users (username, password)
+        VALUES (%s, %s)
         """,
-        (username, hashed_password, reg_date)
+        (username, hashed_password)
     )
 
 
@@ -514,6 +537,17 @@ def answer_vote_up_rep(cursor, user_id):
 
 
 @connection.connection_handler
+def answer_accepted_rep(cursor, user_id):
+    cursor.execute(
+        """
+        UPDATE users
+        SET reputation = reputation + 15
+        WHERE id = (%s)
+        """, [user_id]
+    )
+
+
+@connection.connection_handler
 def answer_vote_down_rep(cursor, user_id):
     cursor.execute(
         """
@@ -605,6 +639,47 @@ def get_all_comment_ids_for_question(cursor, question_id):
     for c_id in real_dict:
         comment_ids.append(c_id['id'])
     return comment_ids
+
+
+@connection.connection_handler
+def get_questions_of_user(cursor, user_id):
+    cursor.execute(
+        """
+        SELECT question.message, question.id
+        FROM question
+        JOIN users_questions ON users_questions.question_id = question.id
+        WHERE users_questions.user_id = (%s)
+        """, [user_id]
+    )
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def get_answers_of_user(cursor, user_id):
+    cursor.execute(
+        """
+        SELECT answer.message, answer.id
+        FROM answer
+        JOIN users_answers ON users_answers.answer_id = answer.id
+        WHERE users_answers.user_id = (%s)
+        """, [user_id]
+    )
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def get_comments_of_user(cursor, user_id):
+    cursor.execute(
+        """
+        SELECT comment.message, comment.id
+        FROM comment
+        JOIN users_comments ON users_comments.comment_id = comment.id
+        WHERE users_comments.user_id = (%s)
+        """, [user_id]
+    )
+    return cursor.fetchall()
+
+
 
 
 
