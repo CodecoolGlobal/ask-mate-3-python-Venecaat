@@ -1,0 +1,49 @@
+/*-------------------------------------LOGIN SECTION-------------------------------------*/
+.login-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-input-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.login-input:nth-child(even){
+    margin-top: 20px;
+}
+.login-button-container{
+    min-width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.register{
+    margin-top: 20px;
+}
+
+/*-------------------------------------REGISTER SECTION-------------------------------------*/
+
+.register-input-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.register-input:nth-child(even){
+    margin-top: 20px;
+}
+
+.register-button-container{
+    min-width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}

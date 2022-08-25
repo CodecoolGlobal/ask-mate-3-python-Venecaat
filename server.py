@@ -20,6 +20,7 @@ def main_page():
     return render_template("index.html", questions=latest_qs)
 
 
+
 @app.route("/list", methods=['GET', 'POST'])
 def list_questions():
     if "sort_by" in request.url:
@@ -313,6 +314,16 @@ def bonus_questions():
 
     return render_template("bonus-questions.html", questions=bonus_questions_list)
 
+
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    return render_template('login.html')
+
+
+@app.route('/registration', methods=['POST', 'GET'])
+def register():
+    return render_template('registration.html')
 
 if __name__ == "__main__":
     app.run(

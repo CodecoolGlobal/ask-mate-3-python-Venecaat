@@ -3,14 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Registration</title>
+        <link rel="stylesheet" type="text/css" href="/static/main.css">
+        <link rel="stylesheet" type="text/css" href="/static/index.css">
+        <link rel="stylesheet" type="text/css" href="/static/authentication.css">
 </head>
 <body>
-    <form action="/registration", method="post">
-        <p>Type in your email:</p>
-        <input type="text" name="username" placeholder="Email"><br>
-        <p>Type in the password you want to use:</p>
-        <input type="password" name="password" placeholder="Password"><br><br>
-        <button type="submit">Register</button>
-    </form>
+    <main class="list-main-div">
+        <nav class="navbar">
+            <div class="home-button-container">
+                <a href="/">
+                <button name="home-button" id="home-button"><img src="/static/resources/images/logo.png" alt="home-icon"></button>
+                </a>
+            </div>
+            <h1 class="main-title">Jamaican <span style="color: seagreen">Q</span>&<span style="color: goldenrod">A</span></h1>
+        </nav>
+        <form action="/login", method="post" class="login-form">
+            <h1>Create an account</h1>
+            <div class="register-input-container">
+                <input class="register-input" type="text" name="username" placeholder="E-mail">
+                <input class="register-input" type="password" name="password" placeholder="Password">
+            <div class="register-button-container">
+                <a href="/login">Already have an account?</a>
+                <button class="login-button" type="submit">Register</button>
+            </div>
+            </div>
+        </form>
+            <section class="register">
+            </section>
+    </main>
 </body>
 </html>

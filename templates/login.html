@@ -1,16 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-</head>
-<body>
-    <form action="/login", method="post">
-        <p>Type in your email:</p>
-        <input type="text" name="username" placeholder="Email"><br>
-        <p>Type in the password you want to use:</p>
-        <input type="password" name="password" placeholder="Password"><br><br>
-        <button type="submit">Login</button>
-    </form>
-</body>
+    <head>
+        <meta charset="utf-8">
+        <title>Jamaican Q&A</title>
+        <link rel="stylesheet" type="text/css" href="/static/main.css">
+        <link rel="stylesheet" type="text/css" href="/static/list.css">
+        <link rel="stylesheet" type="text/css" href="/static/authentication.css">
+    </head>
+    <body class="html-body">
+        <main class="list-main-div">
+        <nav class="navbar">
+            <div class="home-button-container">
+                <a href="/">
+                <button name="home-button" id="home-button"><img src="/static/resources/images/logo.png" alt="home-icon"></button>
+                </a>
+            </div>
+            <h1 class="main-title">Jamaican <span style="color: seagreen">Q</span>&<span style="color: goldenrod">A</span></h1>
+        </nav>
+        <form action="/login", method="post" class="login-form">
+            <h1>Log in</h1>
+            <div class="login-input-container">
+                <input class="login-input" type="text" name="username" placeholder="E-mail">
+                <input class="login-input" type="password" name="password" placeholder="Password">
+            <div class="login-button-container">
+                <a href="/registration">Need an account?</a>
+                <button class="login-button" type="submit">Login</button>
+            </div>
+            </div>
+        </form>
+            <section class="register">
+            </section>
+    </main>
+    </body>
 </html>
