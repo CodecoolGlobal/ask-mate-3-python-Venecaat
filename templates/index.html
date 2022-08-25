@@ -31,10 +31,6 @@
             <img src="/static/resources/images/logo.png" alt="main logo">
             <h1 class="main-title">Jamaican <span style="color: seagreen">Q</span>&<span style="color: goldenrod">A</span></h1>
             <div class="menu">
-                {% if not username %}
-                <a href="/login"><button class="button">Login</button></a>
-                <a href="/registration"><button class="button">Register</button></a>
-                {% endif %}
                 {% if username %}
                 <a href="/add-question"><button class="button">Post a new question</button></a>
                 {% endif %}
