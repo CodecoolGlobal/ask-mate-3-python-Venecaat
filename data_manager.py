@@ -391,7 +391,6 @@ def get_one_user_data(cursor, user_id):
     return cursor.fetchone()
 
 
-@connection.connection_handler
 def check_if_user_exists(username):
     exists = False
     all_user_data = get_all_user_data()
@@ -402,7 +401,6 @@ def check_if_user_exists(username):
     return exists
 
 
-@connection.connection_handler
 def get_hashed_password_by_username(username):
     all_user_data = get_all_user_data()
     for users_data in all_user_data:
