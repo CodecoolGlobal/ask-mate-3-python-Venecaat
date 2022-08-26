@@ -157,7 +157,9 @@
     align-items: center;
     justify-content: flex-start;
 }
-
+#accepted{
+    border-color: green;
+}
 .answer-body{
     width: 90%;
     display: flex;

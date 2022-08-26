@@ -218,7 +218,7 @@
                 <div class="answers">
                     {% for k,v in ans.items() %}
                         {% if k == "message" %}
-                        <article class="answer">
+                        <article class="answer" {% if ans["accepted"] %}id="accepted"{% endif %}>
                             {% for k,v in ans.items() %}
                                 {% if k == "submission_time" %}
                                 <div class="date-container">
