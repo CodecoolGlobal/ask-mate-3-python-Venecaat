@@ -574,11 +574,21 @@ def user_details(username):
 
 
 @app.route('/mark_answer/<int:answer_id>')
-def mark_answer_accepted(answer_id):
+def mark_answer(answer_id):
     question_id = data_manager.get_answer_question_id(answer_id)
-    data_manager.modify_value_in_answer(answer_id=answer_id, accept=True)
+    given_answer = data_manager.get_answer_by_id(answer_id)
+    if given_answer["accepted"]:
+        data_manager.modify_value_in_answer(answer_id=answer_id, accept=False)
+    else:
+        data_manager.modify_value_in_answer(answer_id=answer_id, accept=True)
 
     return redirect(f'/question/{question_id}')
+
+
+# TO DO
+# check reputation inccrease, decrease
+# highlight search results
+# check number of que/ans/comm  changes properly
 
 
 if __name__ == "__main__":

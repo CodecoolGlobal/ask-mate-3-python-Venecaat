@@ -228,14 +228,14 @@ def modify_value_in_question(cursor, question_id, voting="", view="", edited_que
 
 
 @connection.connection_handler
-def modify_value_in_answer(cursor, answer_id, voting="", edited_answer=False, message="", accept=False):
+def modify_value_in_answer(cursor, answer_id, voting="", edited_answer=False, message="", accept=None):
     if voting == "vote-up":
         cursor.execute(f"UPDATE answer SET vote_number = vote_number + 1 WHERE id = {answer_id}")
     elif voting == "vote-down":
         cursor.execute(f"UPDATE answer SET vote_number = vote_number - 1 WHERE id = {answer_id}")
     if edited_answer:
         cursor.execute(f"UPDATE answer SET message = '{message}' WHERE id = {answer_id}")
-    if accept:
+    if accept or not accept:
         cursor.execute(f"UPDATE answer SET accepted = {accept} WHERE id = {answer_id}")
 
 
